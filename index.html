@@ -65,7 +65,7 @@ body.held{overflow:hidden;height:100svh}
 #mute[data-on="1"] .b{display:none}
 
 /* the ride: every beat lands somewhere different */
-.beat{position:relative;min-height:118svh;display:flex;padding:0 7vw}
+.beat{position:relative;min-height:104svh;display:flex;padding:0 7vw}
 .beat .body{max-width:min(88vw,22rem)}
 .beat .k{display:block;margin-bottom:1rem;opacity:0}
 .beat .line{font-family:var(--serif);font-weight:400;font-size:clamp(1.6rem,7.6vw,2.6rem);line-height:1.16;
@@ -84,7 +84,7 @@ body.held{overflow:hidden;height:100svh}
 .p-lowleft{align-items:flex-end;justify-content:flex-start;padding-bottom:20svh}
 
 /* plates drifting past */
-.pl{position:relative;min-height:112svh;display:flex;align-items:center;padding:0 6vw}
+.pl{position:relative;min-height:100svh;display:flex;align-items:center;padding:0 6vw}
 .pl.r{justify-content:flex-end}
 .pl figure{margin:0;width:min(66vw,17rem);opacity:0}
 .pl .win{overflow:hidden;background:#050818;border:1px solid rgba(244,239,228,.16);padding:.5rem;aspect-ratio:4/5}
@@ -94,7 +94,7 @@ body.held{overflow:hidden;height:100svh}
 .pl .cap{font-family:var(--hand);font-size:1.2rem;color:var(--soft);line-height:1.3}
 
 /* finale */
-#finale{height:520svh;position:relative}
+#finale{height:640svh;position:relative}
 #pin{position:sticky;top:0;height:100svh;overflow:hidden}
 #pin .mid{position:absolute;inset:0}
 #flower{position:absolute;left:50%;top:50%;width:min(74vw,25rem);height:auto;overflow:visible;opacity:0;transform:translate(-50%,-36.36%)}
@@ -106,12 +106,6 @@ body.held{overflow:hidden;height:100svh}
 #flower .leaf{fill:#4a8c3a}
 #lab{position:absolute;left:0;right:0;top:9svh;text-align:center;opacity:0;padding:0 7vw}
 #lab .big{font-family:var(--serif);font-size:clamp(1.6rem,7.4vw,2.5rem);font-weight:400;line-height:1.16;margin:.55rem 0 0}
-#cap{position:absolute;left:50%;bottom:8svh;transform:translateX(-50%);width:min(88vw,26rem);opacity:0}
-#cap dl{display:grid;grid-template-columns:auto 1fr;gap:.4rem 1rem;margin:0 0 .9rem;
-  border-top:1px solid var(--hair);border-bottom:1px solid var(--hair);padding:.85rem 0}
-#cap dt{font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:var(--sage)}
-#cap dd{margin:0;font-size:.8rem;color:rgba(244,239,228,.8)}
-#cap .mean{font-size:.84rem;line-height:1.85;color:var(--soft);margin:0}
 #motto{position:absolute;left:0;right:0;bottom:5svh;text-align:center;font-family:var(--hand);
   font-size:clamp(2.1rem,10vw,3.6rem);color:var(--butter);opacity:0;clip-path:inset(0 100% 0 0);padding:0 6vw}
 #edge{position:absolute;inset:0;pointer-events:none;opacity:0}
@@ -124,6 +118,9 @@ body.held{overflow:hidden;height:100svh}
 /* outro */
 #outro{padding:20svh 8vw 16svh;display:flex;flex-direction:column;align-items:center}
 #outro p{font-size:clamp(1.02rem,4.4vw,1.14rem);line-height:1.95;margin:0 0 1.35em;max-width:31rem;width:100%;opacity:0}
+#notewrap .body{max-width:min(88vw,25rem)}
+#notewrap .k{color:var(--pink)}
+#notewrap .said{font-family:var(--hand);font-size:clamp(1.45rem,6.4vw,2rem);line-height:1.45;color:var(--butter);margin:0}
 #outro .bnote{max-width:31rem;width:100%;margin:.4rem 0 1.8rem;padding-top:1.4rem;
   border-top:1px solid var(--hair);font-family:var(--sans);font-size:.7rem;letter-spacing:.16em;
   text-transform:uppercase;color:var(--sage);opacity:0}
@@ -163,6 +160,10 @@ body.held{overflow:hidden;height:100svh}
   overflow:visible;will-change:transform,opacity}
 #sparrow .wing{transform-origin:58px 48px}
 #sparrow .legs{opacity:0}
+#tomato{position:absolute;left:0;top:0;width:clamp(32px,8.5vw,48px);height:auto;opacity:0;overflow:visible;will-change:transform,opacity}
+#bfly{position:absolute;left:0;top:0;width:clamp(26px,7vw,40px);height:auto;opacity:0;overflow:visible;will-change:transform,opacity}
+#bfly .lw{transform-origin:30px 25px}
+#bfly .rw{transform-origin:30px 25px}
 
 /* the ready state */
 #firststar{opacity:.34;transition:opacity 1.4s ease}
@@ -197,6 +198,20 @@ body.held{overflow:hidden;height:100svh}
   box-shadow:0 0 26px 9px rgba(227,169,183,.4);opacity:0}
 #hud,#mute{transition:opacity .7s ease}
 
+/* if the CDNs are gone one day, everything still shows, just still */
+html.bare .beat .k,html.bare .said,html.bare .beat .line .w,html.bare .pl figure,
+html.bare #outro p,html.bare #usplate,html.bare #lab{opacity:1!important;transform:none!important;filter:none!important}
+html.bare #sig,html.bare #motto{clip-path:none!important;opacity:1!important}
+html.bare #flight,html.bare #glass,html.bare #grain,html.bare #birds,html.bare #flash{display:none}
+html.bare #finale{height:auto}
+html.bare #pin{position:static;height:auto;overflow:visible;padding:10vh 0}
+html.bare #lab,html.bare #motto{position:static;bottom:auto;top:auto;left:auto;right:auto;
+  transform:none;margin:1.6rem auto;width:min(88vw,26rem)}
+html.bare #flower{position:static;transform:none;opacity:1;display:block;margin:0 auto;width:min(70vw,20rem)}
+html.bare #last{height:auto;padding:14vh 0}
+html.bare #lastdot{opacity:1}
+html.bare .win img{clip-path:none!important}
+
 @media (prefers-reduced-motion:reduce){
   .beat .k,.beat .said,.beat .line .w,.pl figure,#outro p,#usplate{opacity:1!important;transform:none!important}
   #sig,#motto{clip-path:none!important}
@@ -210,19 +225,51 @@ body.held{overflow:hidden;height:100svh}
 <div id="grain"></div>
 <div id="flash"></div>
 <div id="birds"><svg id="sparrow" viewBox="0 0 124 104" aria-hidden="true">
-  <g class="legs" stroke="#d8a86a" stroke-width="2.4" stroke-linecap="round">
-    <path d="M52 76 L50 88 M46 88 L54 88"/><path d="M64 76 L67 88 M63 88 L71 88"/>
+  <g class="legs" stroke="#e0b078" stroke-width="2.3" stroke-linecap="round">
+    <path d="M53 77 L51 89 M47 89 L55 89"/><path d="M65 77 L68 89 M64 89 L72 89"/>
   </g>
-  <path d="M28 52 C 16 44 8 40 3 44 C 9 50 10 56 6 63 C 14 65 22 62 29 58 Z" fill="#8a5f3a"/>
-  <ellipse cx="56" cy="55" rx="30" ry="25" fill="#bd8d5e" transform="rotate(-7 56 55)"/>
-  <ellipse cx="55" cy="64" rx="22" ry="14" fill="#f2e0c4"/>
-  <path class="wing" d="M40 47 C 53 37 71 39 79 49 C 68 60 50 58 40 47 Z" fill="#9c7248"/>
-  <circle cx="86" cy="37" r="19.5" fill="#c99c6c"/>
-  <path d="M69 27 C 76 18 96 18 103 29 C 94 23 78 22 69 27 Z" fill="#8a5f3a"/>
-  <ellipse cx="79" cy="45" rx="8" ry="6" fill="#f2e0c4" opacity=".75"/>
-  <circle cx="92" cy="34" r="4.6" fill="#241609"/>
-  <circle cx="93.6" cy="32.4" r="1.6" fill="#fff8e7"/>
-  <path d="M103 38 L115 42 L103 46 Z" fill="#f2c04a"/>
+  <path d="M29 53 C 17 45 9 41 4 45 C 10 51 11 57 7 64 C 15 66 23 63 30 59 Z" fill="#9a6f47"/>
+  <ellipse cx="56" cy="56" rx="29" ry="24" fill="#c49468" transform="rotate(-7 56 56)"/>
+  <ellipse cx="55" cy="66" rx="21" ry="13" fill="#f6e8d2"/>
+  <path class="wing" d="M41 48 C 54 38 71 40 79 50 C 68 61 51 59 41 48 Z" fill="#a97c50"/>
+  <path class="wing" d="M46 50 C 56 45 67 46 73 51 C 65 57 53 56 46 50 Z" fill="#f0dcbe" opacity=".45"/>
+  <circle cx="87" cy="36" r="20" fill="#d0a575"/>
+  <path d="M70 26 C 78 16 97 17 104 28 C 95 22 79 21 70 26 Z" fill="#a2734a"/>
+  <path d="M84 15 C 86 8 90 6 92 9 C 89 11 88 13 88 17 Z" fill="#a2734a"/>
+  <path d="M75 30 C 84 25 96 25 103 30 C 95 28 83 28 75 31 Z" fill="#f6e8d2"/>
+  <ellipse cx="80" cy="46" rx="7.5" ry="5" fill="#e8a49c" opacity=".45"/>
+  <g stroke="#2a1a0d" stroke-width="1.5" stroke-linecap="round">
+    <path d="M89 27 L87.5 24"/><path d="M93 26 L93 23"/><path d="M97 27 L98.5 24.5"/>
+  </g>
+  <circle cx="93" cy="34" r="5" fill="#2a1a0d"/>
+  <circle cx="94.7" cy="32.2" r="1.9" fill="#fff8e7"/>
+  <path d="M104 39 L114 42 L104 45 Z" fill="#e8b84a"/>
+</svg><svg id="tomato" viewBox="0 0 120 112" aria-hidden="true">
+  <ellipse cx="60" cy="69" rx="43" ry="37" fill="#c33826"/>
+  <ellipse cx="60" cy="66" rx="43" ry="35" fill="#d94430"/>
+  <ellipse cx="45" cy="53" rx="13" ry="9" fill="#e2604a"/>
+  <ellipse cx="42" cy="50" rx="7" ry="4.5" fill="#ee8168"/>
+  <g fill="#4a8c3a">
+    <ellipse cx="60" cy="22" rx="4.6" ry="11" transform="rotate(-90 60 33)"/>
+    <ellipse cx="60" cy="22" rx="4.6" ry="11" transform="rotate(-52 60 33)"/>
+    <ellipse cx="60" cy="22" rx="4.6" ry="11"/>
+    <ellipse cx="60" cy="22" rx="4.6" ry="11" transform="rotate(52 60 33)"/>
+    <ellipse cx="60" cy="22" rx="4.6" ry="11" transform="rotate(90 60 33)"/>
+  </g>
+  <ellipse cx="60" cy="32" rx="6.5" ry="5.5" fill="#3f7a33"/>
+  <path d="M60 32 L60 19" stroke="#3f7a33" stroke-width="5.5" stroke-linecap="round"/>
+  <circle cx="60" cy="19" r="3" fill="#4a8c3a"/>
+</svg><svg id="bfly" viewBox="0 0 60 48" aria-hidden="true">
+  <g class="lw">
+    <ellipse cx="18" cy="16" rx="17" ry="12" transform="rotate(-20 18 16)" fill="#7fb3e8"/>
+    <ellipse cx="21" cy="33" rx="12" ry="9" transform="rotate(22 21 33)" fill="#4b83c9"/>
+  </g>
+  <g class="rw">
+    <ellipse cx="42" cy="16" rx="17" ry="12" transform="rotate(20 42 16)" fill="#8fbdec"/>
+    <ellipse cx="39" cy="33" rx="12" ry="9" transform="rotate(-22 39 33)" fill="#5a8fd6"/>
+  </g>
+  <ellipse cx="30" cy="25" rx="2.6" ry="12" fill="#26344f"/>
+  <circle cx="30" cy="12" r="3" fill="#26344f"/>
 </svg></div>
 
 <div id="ignite">
@@ -250,7 +297,7 @@ body.held{overflow:hidden;height:100svh}
 </button>
 
 <main id="doc"></main>
-<audio id="bgm" loop preload="auto"></audio>
+<audio id="bgm" preload="auto"></audio>
 
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
@@ -270,7 +317,7 @@ window.CONTENT = {
 
     { pos: "p-left", k: "star two \u00b7 3am \u00b7 brightest",
       line: "You pick up at 3am like it's 3pm.",
-      said: "No hello. No complaining. Never once asked what time it was. Straight to the problem. People talk about having someone like that." },
+      said: "No hello. No complaining. Never once asked what time it was. Straight to the problem. You're that person for me." },
 
     { pos: "p-right", k: "star three \u00b7 on record",
       line: "You were right and I never said it.",
@@ -278,9 +325,9 @@ window.CONTENT = {
 
     { pos: "p-lowleft", k: "star four \u00b7 always you",
       line: "You hear everything first.",
-      said: "Good news, bad news, nothing news. And you're the only person I cry in front of. I grew up around you and around the way you look after people." },
+      said: "Good news, bad news, nothing news. And you're the only person I cry in front of. I grew up with you, and with the way you look after people." },
 
-    { pos: "p-high", k: "star five \u00b7 audible",
+    { pos: "p-high", k: "star five \u00b7 loud",
       line: "I can hear you from another room.",
       said: "Sometimes another floor. By now those nurses have met the lisp, the laugh, and the yapping. Go easy on them, they're trying to work." },
 
@@ -294,7 +341,7 @@ window.CONTENT = {
 
     { pos: "p-right", k: "star eight \u00b7 the whole point",
       line: "Nothing happened. I just like you.",
-      said: "Some people are hard work. You're a relief. That's the entire thing, and it's the last star before you see where you've been going." }
+      said: "Some people are hard work. You're a relief. That's the entire thing." }
   ],
 
   photos: [
@@ -309,8 +356,6 @@ window.CONTENT = {
     line: "You're awake. Of course you are.",
     said: "This star isn't on the chart, and it isn't here at any other hour. You only found it because you're up at three in the morning again. Either it hurts or you're bored. Either way you know what to do about it, and you know I pick up." },
 
-  chaku: "also catalogued as Chaku",
-
   /* her birthday. the page keeps track so he can stop guessing. */
   bday: { month: 11, day: 23, year: 2003 },
   bdayNear:  "not November yet. I checked, twice.",
@@ -321,6 +366,55 @@ window.CONTENT = {
     line: "Happy birthday, Chaku.",
     said: "This screen exists today and no other day. Tomorrow it's gone, and it comes back next year. Twenty-three. November. Two thousand and three. Written into the page permanently, so I can never get the month wrong again \u2014 though I probably still will, out loud, to your face."
   },
+
+  /* one of these per visit, never the same one twice in a row.
+     add as many as you like, the page handles the rest. */
+  notes: [
+    "You've been the person people call at 3am since you were about fifteen. Nobody taught you that. You just do it.",
+    "Every room you walk into gets easier. I've watched it happen for years and I still don't know how you manage it.",
+    "You do a peace sign in literally every photograph. Every single one. Go and check.",
+    "You never once made me feel stupid for asking the same thing twice. Or four times.",
+    "Reminder: you were right about the thing. I'm still not saying which thing.",
+    "You cannot lift that. Whatever it is. Put it down.",
+    "Somewhere in your room there is a Hot Wheels you have not accounted for.",
+    "Play 'Blinding Lights' today. Do not dance to it. You've had surgery.",
+    "Song for today: 'Ilahi' from Yeh Jawaani Hai Deewani. Put it on and look out of the window. That's your entire personality.",
+    "Try 'Kesariya'. It's a ridiculous day for it, which is exactly why.",
+    "Did you take the medicine? Don't lie to a webpage.",
+    "You've been on your phone a while. Put it down and sleep. I'll still be here.",
+    "Drink water. Not coffee. I know exactly what you were thinking.",
+    "Sparrows can't hover. You'd have found a way.",
+    "Blue is a very showy colour for a butterfly to be. Extremely you.",
+    "The sunflower turns all day to face the light. You do it without being asked.",
+    "You've told me the same story three times this month and I let you finish every time. That's love, actually.",
+    "You are the only person I've never once had to explain myself to.",
+    "Whatever the nurses have done, they didn't deserve the yapping. Go easy.",
+    "You keep bringing chocolates to people who never ask for them. Nobody says thank you properly. So: thank you.",
+    "You have never once asked if I'm okay in a way that let me get away with lying.",
+    "There is exactly one person I'd call from a police station and it is not a close contest.",
+    "You laugh at your own jokes before you finish them. It's the best thing about you. Never fix it.",
+    "Number of times you've fed me after I said I wasn't hungry: all of them.",
+    "You remember what people tell you. Small things, months later. Almost nobody does that.",
+    "Put on 'Tum Se Hi' from Jab We Met. You'll know exactly why.",
+    "Song for today: 'Sunflower' by Post Malone. Obvious. Play it anyway.",
+    "Try 'Channa Mereya', but only if you're feeling dramatic. You are.",
+    "You've been carrying people for years and you're terrible at letting anyone carry you. Practise this week.",
+    "Whatever you were planning to do today, do about a third of it.",
+    "I have never seen you be cruel. Not once, not even when it was completely deserved. I noticed.",
+    "You're going to try to sit up in a minute. Don't.",
+    "You have a whole face you make right before you say something you shouldn't. I love that face.",
+    "One day we'll be old and you'll still be telling me what to do and I'll still be pretending not to listen.",
+    "If it hurts, say it hurts. To me at least. You don't have to be brave in my direction.",
+    "You still owe me an answer about the trip. I'm patient. I'm not that patient.",
+    "The bike is fine. It is exactly where you left it. Stop thinking about the bike.",
+    "You once stayed on the phone with me until it got light outside and never brought it up again.",
+    "Chaku suits you. Small, loud, impossible to catch, always somewhere she shouldn't be.",
+    "You'll be back to normal soon and you'll forget this week entirely. I won't."
+  ],
+  notesDone: "You have now read every single one of these. There were forty. Nobody was supposed to get that far. They start again from here, and I'll keep adding to them.",
+  noteHead: "observer's note",
+
+  later: "It has been {n} since I built this page. It still opens. It is going to keep opening.",
 
   seventh: { k: "seven times", body: "Seven times you've opened this. I built it thinking you'd read it once. Come back as often as you want. It isn't going anywhere and neither am I." },
   patient: "You didn't skim it. The page counted, and I'm telling you because it matters to me that you didn't.",
@@ -340,21 +434,14 @@ window.CONTENT = {
 
   bike:  { k: "figure one", big: "Of course. It's the bike." },
   nah:   { k: "wrong answer", big: "Nah." },
-  named: { k: "figure two", big: "This. Obviously this." },
-  chart: {
-    designation: "A\u201301",
-    stars: "32, plus her",
-    brightest: "3am, mag \u22121.4",
-    visible: "any bed, any night",
-    meaning: "Named from the Arabic anisa \u2014 the one whose company puts you at ease. Which is a lot to ask of a person, and you have never once dropped it."
-  },
+  named: { k: "figure two", big: "You. Obviously you." },
   her: { k: "the ninth", big: "And this one is you." },
   motto: "live young, live free",
 
   outro: [
     "Yesterday they took out one small piece of you that had no business being there, and you didn't fall down. That's the whole medical story and I'm not making it bigger than it is.",
     "Take the medicine. Sleep more than seems reasonable. Don't bend, don't lift, don't be a hero about any of it.",
-    "I couldn't be on the chair next to your bed. So I put you in the sky and grew you a sunflower instead."
+    "Your name means the one whose company puts people at ease. Nobody told you that and you did it anyway. I couldn't be on the chair next to your bed, so I put you in the sky and grew you a sunflower instead."
   ],
   us: { file: "4-us.jpg", cap: "and this is us", desig: "plate iv" },
   usLine: "Nothing about this one needs changing. Heal up properly and we'll take a much worse version of it.",
@@ -385,6 +472,8 @@ const cl01 = v => v < 0 ? 0 : v > 1 ? 1 : v;
 const ramp = (x,a,b) => cl01((x-a)/(b-a));
 const win2 = (x,a,b,c,d) => Math.min(ramp(x,a,b), 1-ramp(x,c,d));
 const eio = t => t<0.5 ? 4*t*t*t : 1-Math.pow(-2*t+2,3)/2;
+const EMBED = window.EMBED || {};
+const pic = f => EMBED[f] || ('photos/' + f);
 const words = s => esc(s).split(' ').map(w => `<span class="w">${w}</span>`).join(' ');
 
 /* --- her own record: when she first opened it, and how many times --- */
@@ -392,11 +481,31 @@ const store = { get(k){ try { return localStorage.getItem(k); } catch(e){ return
                 set(k,v){ try { localStorage.setItem(k,v); } catch(e){} } };
 let firstISO = store.get('annissa-first');
 if (!firstISO) { firstISO = new Date().toISOString(); store.set('annissa-first', firstISO); }
-const FIRST = new Date(firstISO).toLocaleString(undefined,
-  { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+const SINCE = Math.floor((Date.now() - new Date(firstISO).getTime()) / 86400000);
+const LATER = SINCE >= 330
+  ? C.later.replace('{n}', SINCE >= 660 ? (Math.floor(SINCE / 365) + ' years') : 'a year')
+  : '';
 const visits = (parseInt(store.get('annissa-visits') || '0', 10) || 0) + 1;
 store.set('annissa-visits', String(visits));
-let everSeen = !!store.get('annissa-named');
+
+
+/* pull a note she hasn't had yet */
+let bag = [];
+try { bag = JSON.parse(store.get('annissa-bag') || '[]'); } catch (e) { bag = []; }
+let NOTE;
+if (store.get('annissa-cleared') === '1') {
+  NOTE = C.notesDone;
+  store.set('annissa-cleared', '0');
+} else {
+  if (!Array.isArray(bag) || !bag.length) {
+    bag = C.notes.map((_, i) => i);
+    for (let i = bag.length - 1; i > 0; i--) { const j = (Math.random()*(i+1))|0; [bag[i], bag[j]] = [bag[j], bag[i]]; }
+  }
+  NOTE = C.notes[bag.shift()] || C.notes[0];
+  if (!bag.length) store.set('annissa-cleared', '1');
+  store.set('annissa-bag', JSON.stringify(bag));
+}
+let everSeen = false;   /* only after she reaches the reveal, every single visit */
 
 /* --- the sky knows what time it is where she is --- */
 const hr = new Date().getHours() + new Date().getMinutes() / 60;
@@ -423,16 +532,24 @@ const SEEDS = (DAYS > 30 && DAYS < 20000) ? Math.max(150, Math.min(900, DAYS)) :
 const beats = C.beats.slice();
 let order = [0,1,'p0',2,3,'p1',4,5,'p2',6,7];
 if (SECRET) { beats.push(C.secretStar); order = [0,1,beats.length-1,'p0',2,3,'p1',4,5,'p2',6,7]; }
+/* she never finds it in the same place twice */
+order.splice(2 + Math.floor(Math.random() * (order.length - 3)), 0, 'note');
 const STARS = beats.length;
 const plate = i => {
   const p = C.photos[i];
   return `<section class="pl ${p.side === 'r' ? 'r' : ''}">
     <figure>
-      <div class="win"><img src="photos/${esc(p.file)}" alt="${esc(p.cap)}" loading="lazy" data-alt="${esc(p.file)}"></div>
+      <div class="win"><img src="${pic(p.file)}" alt="${esc(p.cap)}" loading="lazy" data-alt="${esc(p.file)}"></div>
       <div class="meta"><span class="cap">${esc(p.cap)}</span><span class="chart">${esc(p.desig)}</span></div>
     </figure>
   </section>`;
 };
+const noteBlock = () => `<section class="beat p-mid" id="notewrap">
+  <div class="body">
+    <span class="chart k">${esc(C.noteHead)}</span>
+    <p class="said">${esc(NOTE)}</p>
+  </div>
+</section>`;
 const beat = (b,i) => `<section class="beat ${b.pos}" data-b="${i}">
   <div class="body">
     <span class="chart k">${esc(b.k)}</span>
@@ -442,10 +559,10 @@ const beat = (b,i) => `<section class="beat ${b.pos}" data-b="${i}">
 </section>`;
 
 document.getElementById('doc').innerHTML =
-order.map(o => typeof o === 'number' ? beat(beats[o], o) : plate(Number(String(o).slice(1)))).join('') + `
+order.map(o => typeof o === 'number' ? beat(beats[o], o) : o === 'note' ? noteBlock() : plate(Number(String(o).slice(1)))).join('') + `
 <section id="finale">
   <div id="pin">
-    <div id="edge"><span class="n">N</span><span class="tl">RA 19H 42M</span><span class="tr">DEC +38\u00b0</span><span class="bl">EPOCH TONIGHT</span></div>
+    <div id="edge"><span class="n">N</span><span class="tl">RA 19H 42M</span><span class="tr">DEC +38\u00b0</span><span class="bl">EPOCH 2003</span></div>
     <div class="mid">
       <div id="field"></div>
       <svg id="flower" viewBox="0 0 800 1100" role="img" aria-label="A sunflower opening">
@@ -460,19 +577,6 @@ order.map(o => typeof o === 'number' ? beat(beats[o], o) : plate(Number(String(o
       </svg>
     </div>
     <div id="lab"><span class="chart" id="lab-k"></span><p class="big" id="lab-b"></p></div>
-    <div id="cap">
-      <dl>
-        <dt>designation</dt><dd>${esc(C.chart.designation)}</dd>
-        <dt>stars</dt><dd>${esc(C.chart.stars)}</dd>
-        <dt>brightest</dt><dd>${esc(C.chart.brightest)}</dd>
-        <dt>visible from</dt><dd>${esc(C.chart.visible)}</dd>
-        <dt>first observed</dt><dd>${esc(FIRST)}</dd>
-        ${DAYS > 30 ? `<dt>seeds</dt><dd>${SEEDS}, one for every day</dd>` : ''}
-        <dt>also known as</dt><dd>Chaku</dd>
-      </dl>
-      <p class="mean">${esc(C.chart.meaning)}</p>
-
-    </div>
     <p id="motto">${esc(C.motto)}</p>
   </div>
 </section>
@@ -488,10 +592,11 @@ ${IS_BDAY ? `<section class="beat p-mid" data-b="0" id="bday">
 <section id="outro">
   ${C.outro.map(t => `<p>${esc(t)}</p>`).join('')}
   <figure id="usplate">
-    <div class="win"><img src="photos/${esc(C.us.file)}" alt="${esc(C.us.cap)}" loading="lazy" data-alt="${esc(C.us.file)}"></div>
+    <div class="win"><img src="${pic(C.us.file)}" alt="${esc(C.us.cap)}" loading="lazy" data-alt="${esc(C.us.file)}"></div>
     <div class="meta"><span class="cap">${esc(C.us.cap)}</span><span class="chart">${esc(C.us.desig)}</span></div>
   </figure>
   <p>${esc(C.usLine)}</p>
+  ${LATER ? `<p class="bnote">${esc(LATER)}</p>` : ''}
   ${BLINE ? `<p class="bnote">${esc(BLINE)}</p>` : ''}
   <p class="wave">${esc(C.waveLine)}</p>
   <p id="sig">${esc(C.signature)}</p>
@@ -509,6 +614,15 @@ ${IS_BDAY ? `<section class="beat p-mid" data-b="0" id="bday">
   <p id="hint">${esc(C.held.hint)}</p>
   <p id="heldmsg">${esc(C.held.body)}</p>
 </div></section>`;
+
+/* nothing below here works without the animation libraries, so bail out gracefully */
+if (!window.gsap || !window.ScrollTrigger) {
+  document.documentElement.classList.add('bare');
+  document.body.classList.remove('held');
+  const gt = document.getElementById('ignite');
+  if (gt) gt.remove();
+  throw new Error('animation libraries unavailable \u2014 showing the plain version');
+}
 
 document.querySelectorAll('img[data-alt]').forEach(im => im.addEventListener('error', () => {
   if (!im.dataset.t) { im.dataset.t = '1'; im.src = im.dataset.alt; return; }
@@ -550,11 +664,15 @@ const fieldEls = (() => {
   let petals = '';
   for (let k = 0; k < 12; k++)
     petals += `<ellipse cx="100" cy="44" rx="15" ry="40" fill="#f2c04a" transform="rotate(${k*30} 100 100)"/>`;
-  host.innerHTML = FIELD.map(f => `<svg viewBox="0 0 200 320" aria-hidden="true"
-      style="left:${f.x}%;top:${f.y}%;width:${f.w}vw;transform:translate(-50%,-50%) rotate(${f.r}deg)">
-      <path d="M100 130 C 96 196 94 258 101 320" fill="none" stroke="#3f7a33" stroke-width="7" stroke-linecap="round"/>
+  const calyx = (x, y, r) => `<path d="M${x} ${y-r+2} L${x-r*0.5} ${y-r-6} M${x} ${y-r+2} L${x+r*0.5} ${y-r-6}
+      M${x} ${y-r+2} L${x} ${y-r-10} M${x} ${y-r+2} L${x-r*0.8} ${y-r+1} M${x} ${y-r+2} L${x+r*0.8} ${y-r+1}"
+      stroke="#3f7a33" stroke-width="${r*0.20}" stroke-linecap="round"/>`;
+  const sun = `<path d="M100 130 C 96 196 94 258 101 320" fill="none" stroke="#3f7a33" stroke-width="7" stroke-linecap="round"/>
       <path d="M99 214 C 66 194 36 200 18 220 C 42 244 82 238 99 220 Z" fill="#4a8c3a"/>
-      ${petals}<circle cx="100" cy="100" r="27" fill="#6b4a26"/><circle cx="100" cy="100" r="18" fill="#54391d"/>
+      ${petals}<circle cx="100" cy="100" r="27" fill="#6b4a26"/><circle cx="100" cy="100" r="18" fill="#54391d"/>`;
+  host.innerHTML = FIELD.map(f => `<svg viewBox="0 0 200 320" aria-hidden="true"
+      style="left:${f.x}%;top:${f.y}%;width:min(${f.w}vw,${Math.round(f.w*6.2)}px)">
+      ${sun}
     </svg>`).join('');
   return [...host.children];
 })();
@@ -562,18 +680,55 @@ const fieldEls = (() => {
 /* ---------------- constellation geometry ---------------- */
 const SP = { w: 1000, h: 560 };
 const BIKE = [
-  [250,300],[163,350],[163,450],[250,500],[337,450],[337,350],
-  [760,300],[673,350],[673,450],[760,500],[847,450],[847,350],
-  [200,258],[330,244],[450,224],[556,244],[648,238],[704,214],
-  [656,166],[752,172],[716,286],[500,352],[150,242],[390,414],
-  [574,118],[898,238],[108,406],[628,466],[296,138],[860,126],[392,132],[930,392]
+  [355.0,380.0],
+  [340.9,432.5],
+  [302.5,470.9],
+  [250.0,485.0],
+  [197.5,470.9],
+  [159.1,432.5],
+  [145.0,380.0],
+  [159.1,327.5],
+  [197.5,289.1],
+  [250.0,275.0],
+  [302.5,289.1],
+  [340.9,327.5],
+  [860.0,380.0],
+  [845.9,432.5],
+  [807.5,470.9],
+  [755.0,485.0],
+  [702.5,470.9],
+  [664.1,432.5],
+  [650.0,380.0],
+  [664.1,327.5],
+  [702.5,289.1],
+  [755.0,275.0],
+  [807.5,289.1],
+  [845.9,327.5],
+  [196,250],
+  [262,240],
+  [352,236],
+  [430,214],
+  [516,234],
+  [572,250],
+  [648,240],
+  [700,212],
+  [652,164],
+  [750,170],
+  [708,262],
+  [730,320],
+  [470,300],
+  [486,348],
+  [420,392],
+  [372,430],
+  [168,286],
+  [136,248],
+  [700,316],
+  [352,398],
+  [218,262],
+  [536,296]
 ];
 const BIKE_E = [
-  [0,1],[1,2],[2,3],[3,4],[4,5],[5,0],
-  [6,7],[7,8],[8,9],[9,10],[10,11],[11,6],
-  [12,0],[12,13],[13,14],[14,15],[15,16],[16,17],
-  [17,18],[17,19],[17,20],[20,6],
-  [15,21],[21,5],[21,23],[23,4],[12,22]
+  [0,1], [1,2], [2,3], [3,4], [4,5], [5,6], [6,7], [7,8], [8,9], [9,10], [10,11], [11,0], [12,13], [13,14], [14,15], [15,16], [16,17], [17,18], [18,19], [19,20], [20,21], [21,22], [22,23], [23,12], [24,25], [25,26], [26,27], [27,28], [28,29], [29,30], [30,31], [31,32], [31,33], [31,34], [34,35], [35,42], [42,20], [24,40], [40,41], [40,8], [24,44], [44,9], [28,45], [45,36], [36,37], [37,38], [38,43], [43,11], [38,39]
 ];
 const GLY = {
   A:{p:[[50,0],[6,150],[94,150],[21,100],[79,100]],e:[[0,1],[0,2],[3,4]]},
@@ -592,32 +747,42 @@ const NAME = [], NAME_E = [];
     base += g.p.length;
   });
 }
-const MAP = BIKE.map((_, i) => i);
-MAP[17] = 0; MAP[0] = 17;
-const NAME_E_B = NAME_E.map(e => [MAP.indexOf(e[0]), MAP.indexOf(e[1])]);
-const BRIGHT = [12, 14, 17, 18, 19, 21, 22, 9];
+const BRIGHT = [24, 27, 31, 32, 33, 37, 41, 15];
 const BSET = new Set(BRIGHT);
+/* the bike is drawn with more stars than her name needs.
+   32 of them travel; the rest let go. reshuffled every visit. */
+const shuffle = a => { for (let i = a.length-1; i > 0; i--) { const j = (Math.random()*(i+1))|0; [a[i],a[j]] = [a[j],a[i]]; } return a; };
+const spare = shuffle(BIKE.map((_, i) => i).filter(i => !BRIGHT.includes(i)));
+const TRAVEL = BRIGHT.concat(spare.slice(0, NAME.length - BRIGHT.length));
+const slots = shuffle(NAME.map((_, i) => i));
+{ const b = TRAVEL.indexOf(31), z = slots.indexOf(0); [slots[b], slots[z]] = [slots[z], slots[b]]; }
+const MAP = BIKE.map(() => -1);
+const INV = NAME.map(() => -1);
+TRAVEL.forEach((bi, k) => { MAP[bi] = slots[k]; INV[slots[k]] = bi; });
+const DELAY = BIKE.map(() => Math.random()*0.34);
+const JIT = BIKE.map(() => [(Math.random()-0.5)*2, (Math.random()-0.5)*2]);
+
+const NAME_E_B = NAME_E.map(e => [INV[e[0]], INV[e[1]]]);
 const HER = [500, 452];
 
 /* ---------------- audio ---------------- */
 const bgm = document.getElementById('bgm');
 const SRCS = ['song.mp3', 'Charle_Puth_feat._Selena_Gomez_-_We_Don_t_Talk_Anymore_(mp3_pm).mp3'];
+if (EMBED['song.mp3']) SRCS.unshift(EMBED['song.mp3']);
 let si = 0; bgm.src = SRCS[0];
 bgm.addEventListener('error', () => { if (++si < SRCS.length) bgm.src = SRCS[si]; });
-let ana = null, freq = null, pulse = 0.4, dead = 0;
-const LOCAL = location.protocol === 'file:';
-function wireAudio() {
-  if (LOCAL) return;
-  try {
-    const AC = window.AudioContext || window.webkitAudioContext;
-    const ac = new AC();
-    const node = ac.createMediaElementSource(bgm);
-    ana = ac.createAnalyser(); ana.fftSize = 256; ana.smoothingTimeConstant = 0.78;
-    freq = new Uint8Array(ana.frequencyBinCount);
-    node.connect(ana); ana.connect(ac.destination);
-    if (ac.state === 'suspended') ac.resume();
-  } catch (e) { ana = null; }
-}
+bgm.addEventListener('ended', () => {
+  if (!wantLoop) return;
+  bgm.currentTime = 0;
+  bgm.volume = 0;
+  bgm.play().catch(() => {});
+  gsap.to(bgm, { volume: 0.62, duration: 2.4, ease: 'power1.out' });
+});
+let pulse = 0.4, actx = null;
+let wantLoop = true, hushed = false, hushDone = false;
+/* the mp3's own loop point clicks, so it gets restarted by hand with a fade instead.
+   nothing is routed through Web Audio: the song plays straight from the element,
+   which is the only way it stays rock solid while the finale is rendering. */
 
 /* ---------------- flight ---------------- */
 const fc = document.getElementById('flight');
@@ -843,7 +1008,6 @@ function igniteNow(jump) {
   if (entered) return;
   entered = true;
   started = Date.now();
-  wireAudio();
   bgm.volume = 0;
   bgm.play().then(() => { mute.classList.add('show'); gsap.to(bgm, { volume: 0.62, duration: 7, ease: 'power1.inOut' }); })
             .catch(() => { mute.classList.add('show'); mute.dataset.on = '0'; });
@@ -918,14 +1082,19 @@ const DIRS = [
   { x: -50, y: 50 }, { x: 60,  y: -40 }, { x: -70, y: 0 },
   { x: 0,   y: 60 }, { x: 70,  y: 30 }
 ];
-document.querySelectorAll('.beat').forEach(sec => {
-  const i = +sec.dataset.b, d = DIRS[i % DIRS.length];
-  const k = sec.querySelector('.k'), ws = sec.querySelectorAll('.line .w'), said = sec.querySelector('.said');
-  gsap.timeline({ scrollTrigger: { trigger: sec, start: 'top 74%' } })
-    .fromTo(k, { opacity: 0, x: d.x*0.3, y: d.y*0.3 }, { opacity: 1, x: 0, y: 0, duration: 0.9, ease: 'power2.out' })
-    .fromTo(ws, { opacity: 0, x: d.x*0.5, y: d.y*0.5, rotate: d.x > 0 ? 2 : -2 },
-      { opacity: 1, x: 0, y: 0, rotate: 0, duration: 1.15, ease: 'power3.out', stagger: 0.055 }, 0.18)
-    .fromTo(said, { opacity: 0, y: 22 }, { opacity: 1, y: 0, duration: 1.1, ease: 'power2.out' }, '-=0.35');
+document.querySelectorAll('.beat').forEach((sec, idx) => {
+  const i = sec.dataset.b === undefined ? idx : +sec.dataset.b;
+  const d = DIRS[i % DIRS.length];
+  const k = sec.querySelector('.k');
+  const ws = [...sec.querySelectorAll('.line .w')];
+  const said = sec.querySelector('.said');
+  const tl = gsap.timeline({ scrollTrigger: { trigger: sec, start: 'top 74%' } });
+  if (k) tl.fromTo(k, { opacity: 0, x: d.x*0.3, y: d.y*0.3 },
+    { opacity: 1, x: 0, y: 0, duration: 0.9, ease: 'power2.out' });
+  if (ws.length) tl.fromTo(ws, { opacity: 0, x: d.x*0.5, y: d.y*0.5, rotate: d.x > 0 ? 2 : -2 },
+    { opacity: 1, x: 0, y: 0, rotate: 0, duration: 1.15, ease: 'power3.out', stagger: 0.055 }, 0.18);
+  if (said) tl.fromTo(said, { opacity: 0, y: ws.length ? 22 : 26 },
+    { opacity: 1, y: 0, duration: 1.1, ease: 'power2.out' }, ws.length ? '-=0.35' : 0.22);
 });
 document.querySelectorAll('.pl figure').forEach((f, i) => {
   gsap.fromTo(f, { opacity: 0, x: i % 2 ? 60 : -60, rotate: i % 2 ? 3 : -3, scale: 0.94 },
@@ -942,11 +1111,76 @@ gsap.utils.toArray('#outro p').forEach(p => gsap.fromTo(p, { opacity: 0, y: 24 }
   { opacity: 1, y: 0, duration: 1.15, ease: 'power2.out', scrollTrigger: { trigger: p, start: 'top 88%' } }));
 gsap.fromTo('#usplate', { opacity: 0, scale: 0.94 }, { opacity: 1, scale: 1, duration: 1.4, ease: 'power3.out',
   scrollTrigger: { trigger: '#usplate', start: 'top 82%' } });
-gsap.fromTo('#usplate img', { filter: 'brightness(0.04) contrast(2.6) saturate(0.1)' },
+const usImg = document.querySelector('#usplate img');
+if (usImg) gsap.fromTo(usImg, { filter: 'brightness(0.04) contrast(2.6) saturate(0.1)' },
   { filter: 'brightness(1) contrast(1.02) saturate(0.92)', duration: 2.6, ease: 'power2.inOut',
     scrollTrigger: { trigger: '#usplate', start: 'top 82%' } });
 gsap.to('#sig', { clipPath: 'inset(0 0% 0 0)', duration: 1.9, ease: 'power2.inOut',
   scrollTrigger: { trigger: '#sig', start: 'top 86%' } });
+
+/* one tomato. it turns up beside the note, then leaves a different way every visit. */
+{
+  const tom = document.getElementById('tomato');
+  const W2 = () => innerWidth, H2 = () => innerHeight;
+
+  /* each of these gets handed the timeline and the moment it should start */
+  const EXITS = [
+    /* a gust takes it */
+    (tl, rx, ry, at) => {
+      tl.to(tom, { x: rx - 7, duration: 0.09, repeat: 5, yoyo: true, ease: 'sine.inOut' }, at)
+        .to(tom, { x: W2() + 150, duration: 1.6, ease: 'power2.in' }, at + 0.6)
+        .to(tom, { rotate: 820, duration: 1.6, ease: 'power1.in' }, at + 0.6)
+        .to(tom, { y: ry - H2() * 0.11, duration: 1.6, ease: 'sine.inOut' }, at + 0.6);
+    },
+    /* it simply rolls off, unhurried */
+    (tl, rx, ry, at) => {
+      tl.to(tom, { x: W2() + 130, duration: 2.9, ease: 'power1.in' }, at)
+        .to(tom, { rotate: 1180, duration: 2.9, ease: 'power1.in' }, at);
+    },
+    /* gravity gives up on it */
+    (tl, rx, ry, at) => {
+      tl.to(tom, { y: -150, duration: 3.4, ease: 'power1.in' }, at)
+        .to(tom, { rotate: 190, duration: 3.4, ease: 'none' }, at)
+        .to(tom, { x: rx + 26, duration: 1.1, repeat: 2, yoyo: true, ease: 'sine.inOut' }, at);
+    },
+    /* something boots it */
+    (tl, rx, ry, at) => {
+      tl.to(tom, { y: ry - H2() * 0.30, duration: 0.5, ease: 'power2.out' }, at)
+        .to(tom, { y: H2() + 150, duration: 1.0, ease: 'power2.in' }, at + 0.5)
+        .to(tom, { x: rx - W2() * 0.24, duration: 1.5, ease: 'none' }, at)
+        .to(tom, { rotate: -560, duration: 1.5, ease: 'none' }, at);
+    },
+    /* it cannot decide, then commits */
+    (tl, rx, ry, at) => {
+      tl.to(tom, { x: rx - W2() * 0.09, duration: 0.8, ease: 'power2.out' }, at)
+        .to(tom, { rotate: -280, duration: 0.8, ease: 'power2.out' }, at)
+        .to(tom, { x: rx + W2() * 0.03, duration: 0.7, ease: 'power2.inOut' }, at + 0.95)
+        .to(tom, { rotate: -140, duration: 0.7, ease: 'power2.inOut' }, at + 0.95)
+        .to(tom, { x: W2() + 130, duration: 1.7, ease: 'power2.in' }, at + 2.1)
+        .to(tom, { rotate: 900, duration: 1.7, ease: 'power2.in' }, at + 2.1);
+    },
+    /* the floor stops holding it */
+    (tl, rx, ry, at) => {
+      tl.to(tom, { x: rx + 5, duration: 0.1, repeat: 3, yoyo: true, ease: 'sine.inOut' }, at)
+        .to(tom, { y: H2() + 160, duration: 0.8, ease: 'power3.in' }, at + 0.45)
+        .to(tom, { rotate: 240, duration: 0.8, ease: 'power1.in' }, at + 0.45);
+    }
+  ];
+
+  function tomatoRun() {
+    if (calm) return;
+    const rx = W2() * (0.70 + Math.random() * 0.15);
+    const ry = H2() * (0.70 + Math.random() * 0.08);
+    gsap.killTweensOf(tom);
+    gsap.set(tom, { opacity: 1, x: rx, y: -110, rotate: -34 + Math.random() * 22 });
+    const tl = gsap.timeline();
+    tl.to(tom, { y: ry, duration: 1.3, ease: 'bounce.out' }, 0)
+      .to(tom, { rotate: 5, duration: 1.05, ease: 'power2.out' }, 0);
+    EXITS[(Math.random() * EXITS.length) | 0](tl, rx, ry, 3.2);
+    tl.to(tom, { opacity: 0, duration: 0.35 }, '>-0.3');
+  }
+  ScrollTrigger.create({ trigger: '#notewrap', start: 'top 58%', once: true, onEnter: tomatoRun });
+}
 
 /* star counter follows the flight */
 let flight = 0, S = 0, inFinale = false, logged = 1;
@@ -983,7 +1217,7 @@ ScrollTrigger.create({ trigger: '#finale', start: 'top top', end: 'bottom bottom
 
 /* ---------------- finale staging ---------------- */
 const labEl = document.getElementById('lab'), labK = document.getElementById('lab-k'), labB = document.getElementById('lab-b');
-const capEl = document.getElementById('cap'), edgeEl = document.getElementById('edge');
+const edgeEl = document.getElementById('edge');
 const mottoEl = document.getElementById('motto'), flowerEl = document.getElementById('flower');
 let stage = -1;
 gsap.set([...pOut, ...pIn], { svgOrigin: `${FCX} ${FCY}`, scale: 0.04, opacity: 0 });
@@ -993,7 +1227,10 @@ const stemEl = document.querySelector('#flower .stem');
 const leafEls = [...document.querySelectorAll('#flower .leaf')];
 const stemLen = stemEl.getTotalLength();
 function resetField() {
-  fieldEls.forEach(el => gsap.set(el, { opacity: 0, y: 26 }));
+  fieldEls.forEach((el, i) => gsap.set(el, {
+    xPercent: -50, yPercent: -50, rotation: (FIELD[i] || { r: 0 }).r,
+    opacity: 0, y: 26
+  }));
 }
 resetField();
 function resetGreen() {
@@ -1013,7 +1250,7 @@ function swell() {
   if (mute.dataset.on !== '1') return;
   try {
     const AC = window.AudioContext || window.webkitAudioContext;
-    toneCtx = toneCtx || new AC();
+    toneCtx = toneCtx || actx || new AC();
     if (toneCtx.state === 'suspended') toneCtx.resume();
     const t = toneCtx.currentTime, g = toneCtx.createGain();
     g.gain.setValueAtTime(0.0001, t);
@@ -1038,16 +1275,16 @@ function bloom() {
   tl
     .to(flowerEl, { opacity: 1, duration: 0.6 })
     .to(stemEl, { strokeDashoffset: 0, duration: 1.7, ease: 'power2.inOut' }, 0.15)
-    .to(leafEls[1], { scale: 1, opacity: 1, duration: 0.85, ease: 'back.out(1.6)' }, 0.95)
-    .to(leafEls[0], { scale: 1, opacity: 1, duration: 0.85, ease: 'back.out(1.6)' }, 1.2)
+    .to(leafEls[1], { scale: 1, opacity: 1, duration: 0.85, ease: 'back.out(1.6)' }, 0.85)
+    .to(leafEls[0], { scale: 1, opacity: 1, duration: 0.85, ease: 'back.out(1.6)' }, 1.05)
     .to('#flower .disc', { scale: 1, duration: 1, ease: 'power2.out' }, 0.1)
     .to(pOut, { scale: 1, opacity: 1, duration: 1.5, ease: 'power3.out', stagger: { each: 0.045, from: 'random' } }, 0.3)
     .to(pIn, { scale: 1, opacity: 1, duration: 1.2, ease: 'power3.out', stagger: { each: 0.035, from: 'random' } }, 0.8)
     .to(seeds, { opacity: 1, duration: 0.7, stagger: { each: 0.0025, from: 'center' } }, 1.1)
-    .to(mottoEl, { opacity: 1, duration: 0.5 }, 1.6)
-    .to(mottoEl, { clipPath: 'inset(0 0% 0 0)', duration: 2, ease: 'power2.inOut' }, 1.7);
+    .to(mottoEl, { opacity: 1, duration: 0.5 }, 2.5)
+    .to(mottoEl, { clipPath: 'inset(0 0% 0 0)', duration: 2, ease: 'power2.inOut' }, 2.6);
   fieldEls.forEach((el, i) => tl.to(el,
-    { opacity: FIELD[i].o, y: 0, duration: 1.7, ease: 'power2.out' }, 1.9 + i * 0.13));
+    { opacity: (FIELD[i] || { o: 0.5 }).o, y: 0, duration: 1.4, ease: 'power2.out' }, 1.0 + i * 0.08));
 }
 function unbloom() {
   if (!bloomed) return; bloomed = false;
@@ -1074,7 +1311,7 @@ function stopFlap() {
 }
 let wantsGo = false, bobTw = null;
 /* fly along a real bezier, nose following the tangent */
-function flyAlong(d, dur, ease, done) {
+function flyAlong(el, d, dur, ease, done) {
   const NS = 'http://www.w3.org/2000/svg';
   const holder = document.createElementNS(NS, 'svg');
   const path = document.createElementNS(NS, 'path');
@@ -1089,7 +1326,7 @@ function flyAlong(d, dur, ease, done) {
       const a = path.getPointAtLength(at);
       const b = path.getPointAtLength(Math.min(len, at + 8));
       const ang = Math.atan2(b.y - a.y, b.x - a.x) * 180 / Math.PI;
-      gsap.set(sparrow, { x: a.x, y: a.y, rotate: Math.max(-24, Math.min(18, ang * 0.5)) });
+      gsap.set(el, { x: a.x, y: a.y, rotate: Math.max(-24, Math.min(18, ang * 0.5)) });
     }, onComplete() { holder.remove(); if (done) done(); } });
 }
 function birdLand() {
@@ -1104,12 +1341,11 @@ function birdLand() {
   const d = 'M-110 ' + (py + H*0.16) +
     ' C ' + (W*0.14) + ' ' + (py - H*0.10) + ', ' + (W*0.30) + ' ' + (py + H*0.07) + ', ' + (px - W*0.13) + ' ' + (py - H*0.035) +
     ' S ' + (px - 34) + ' ' + (py + 22) + ', ' + px + ' ' + py;
-  flyAlong(d, 3.2, 'sine.inOut', () => {
+  flyAlong(sparrow, d, 3.2, 'sine.inOut', () => {
     birdState = 'perched';
     if (wantsGo) { birdGo(); return; }
     stopFlap();
     gsap.to('#sparrow .legs', { opacity: 1, duration: 0.45 });
-    bobTw = gsap.to(sparrow, { y: py - 5, duration: 1.9, yoyo: true, repeat: -1, ease: 'sine.inOut' });
   });
 }
 function birdGo() {
@@ -1126,7 +1362,7 @@ function birdGo() {
     ' C ' + (cx + W*0.10) + ' ' + (cy - H*0.20) + ', ' + (W*0.52) + ' ' + (cy - H*0.34) + ', ' + (W*0.80) + ' ' + (-H*0.10) +
     ' S ' + (W*1.05) + ' ' + (-H*0.30) + ', ' + (W*1.28) + ' ' + (-H*0.48);
   gsap.to(sparrow, { opacity: 0, duration: 1, delay: 1.9 });
-  flyAlong(d, 2.9, 'power1.in', () => { gsap.set(sparrow, { opacity: 0 }); stopFlap(); });
+  flyAlong(sparrow, d, 2.9, 'power1.in', () => { gsap.set(sparrow, { opacity: 0 }); stopFlap(); });
 }
 ScrollTrigger.create({ trigger: '#outro', start: 'top 88%', onEnter: birdGo });
 ScrollTrigger.create({ trigger: '#last', start: 'top 95%', onEnter: birdGo });
@@ -1135,7 +1371,10 @@ ScrollTrigger.create({ trigger: '#last', start: 'top 95%', onEnter: birdGo });
 let petalsOn = false;
 const petals = [];
 ScrollTrigger.create({ trigger: '#outro', start: 'top 70%', end: 'bottom top',
-  onToggle: st => { petalsOn = st.isActive; } });
+  onToggle: st => {
+    petalsOn = st.isActive;
+    if (st.isActive && !bflies.length && !calm) spawnBflies(3);
+  } });
 function spawnPetals() {
   if (!petalsOn || calm || petals.length > 9 || Math.random() > 0.028) return;
   petals.push({
@@ -1172,7 +1411,56 @@ function stepPetals() {
   for (let i = petals.length - 1; i >= 0; i--) if (petals[i].y > H + 40) petals.splice(i, 1);
 }
 
+/* ---------------- blue ones. never the same flight twice. ---------------- */
+const bflies = [];
+function spawnBflies(n) {
+  for (let i = 0; i < n; i++) bflies.push({
+    x: Math.random()*W, y: H*(0.35 + Math.random()*0.55),
+    a1: Math.random()*6.283, a2: Math.random()*6.283,
+    s1: 0.5 + Math.random()*0.95, s2: 0.35 + Math.random()*0.85,
+    ax: 0.8 + Math.random()*1.6, ay: 0.45 + Math.random()*1.15,
+    dx: (Math.random() < 0.5 ? -1 : 1)*(0.14 + Math.random()*0.34),
+    dy: -(0.03 + Math.random()*0.13),
+    size: 8 + Math.random()*8, flap: Math.random()*6.283,
+    fs: 0.20 + Math.random()*0.18, rot: 0,
+    a: 0.5 + Math.random()*0.4, t: Math.random()*60
+  });
+}
+function stepBflies() {
+  for (const b of bflies) {
+    b.t += 0.016; b.flap += b.fs;
+    const ox2 = b.x, oy2 = b.y;
+    b.x += b.dx + Math.cos(b.a1 + b.t*b.s1)*b.ax;
+    b.y += b.dy + Math.sin(b.a2 + b.t*b.s2)*b.ay;
+    if (b.x < -70) b.x = W + 60;
+    if (b.x > W + 70) b.x = -60;
+    if (b.y < -70) b.y = H + 60;
+    if (b.y > H + 70) b.y = -60;
+    const want = Math.atan2(b.y - oy2, b.x - ox2);
+    b.rot += (want - b.rot)*0.1;
+    const f = Math.max(0.15, Math.abs(Math.cos(b.flap))), w = b.size;
+    g2.save();
+    g2.translate(b.x, b.y);
+    g2.rotate(b.rot*0.35);
+    g2.globalAlpha = b.a;
+    for (const sg of [-1, 1]) {
+      g2.save(); g2.scale(sg*f, 1);
+      g2.fillStyle = '#7fb3e8';
+      g2.beginPath(); g2.ellipse(w*0.52, -w*0.26, w*0.60, w*0.40, -0.32, 0, 6.283); g2.fill();
+      g2.fillStyle = '#4b83c9';
+      g2.beginPath(); g2.ellipse(w*0.44, w*0.30, w*0.42, w*0.28, 0.34, 0, 6.283); g2.fill();
+      g2.restore();
+    }
+    g2.fillStyle = '#26344f';
+    g2.beginPath(); g2.ellipse(0, 0, w*0.09, w*0.40, 0, 0, 6.283); g2.fill();
+    g2.restore();
+  }
+  g2.globalAlpha = 1;
+}
+
 /* ---------------- her name stays up there ---------------- */
+function seeded(i) { const x = Math.sin(i*127.1 + 311.7)*43758.5453; return x - Math.floor(x); }
+const GROWN = Math.min(160, Math.max(0, visits - 1));
 function drawGhost() {
   const gs = Math.min(W*0.40/1000, H*0.26/560);
   const ox = W*0.545, oy = H*0.06;
@@ -1183,6 +1471,12 @@ function drawGhost() {
   g2.stroke();
   g2.globalAlpha = 0.20; g2.fillStyle = '#fff8e7';
   for (const q of pts) { g2.beginPath(); g2.arc(q[0], q[1], 1, 0, 6.283); g2.fill(); }
+  g2.globalAlpha = 0.12;
+  for (let i = 0; i < GROWN; i++) {
+    g2.beginPath();
+    g2.arc(ox + (seeded(i)*1.3 - 0.15)*1000*gs, oy + (seeded(i + 777)*1.6 - 0.2)*560*gs, 0.85, 0, 6.283);
+    g2.fill();
+  }
   g2.globalAlpha = 1;
 }
 
@@ -1230,9 +1524,18 @@ function loop(now) {
   requestAnimationFrame(loop);
   const t = (now - t0)/1000;
 
+  if (birdState === 'perched') {
+    const rb = flowerEl.getBoundingClientRect();
+    if (rb.width) {
+      const hb = rb.width * (276/800);
+      gsap.set(sparrow, { x: rb.left + rb.width/2 + hb*0.44,
+                          y: rb.top + rb.height*0.3636 - hb*0.72 + Math.sin(t*1.6)*5 });
+    }
+  }
+
+  frames++;
   if (entered && !tuned) {
     if (!fpsT0) fpsT0 = now;
-    frames++;
     if (now - fpsT0 > 2600) {
       tuned = true;
       const fps = frames / ((now - fpsT0) / 1000);
@@ -1245,14 +1548,8 @@ function loop(now) {
     }
   }
 
-  if (ana) {
-    ana.getByteFrequencyData(freq);
-    let s = 0; for (let i = 2; i < 14; i++) s += freq[i];
-    if (s === 0 && !bgm.paused) { if (++dead > 150) ana = null; } else dead = 0;
-    pulse += (s/12/255 - pulse)*0.15;
-  } else {
-    pulse += ((0.42 + 0.58*Math.abs(Math.sin(t*Math.PI*112/60))) - pulse)*0.07;
-  }
+  /* the song is about 100bpm, so the sky breathes with it without touching the audio graph */
+  pulse += ((0.4 + 0.6*Math.abs(Math.sin(t*Math.PI*100/60))) - pulse)*0.075;
 
   if (webgl) {
     const z = -flightEase(flight)*CORRIDOR;
@@ -1286,7 +1583,8 @@ function loop(now) {
     });
     const mb = vel * 0.03;
     rootStyle.setProperty('--mblur', (mb < 0.09 ? 0 : Math.min(1.15, mb)).toFixed(2) + 'px');
-    R.render(scene, cam);
+    /* camera is parked through the finale, so the corridor only needs a third of the frames */
+    if (!inFinale || S < 0.2 || (frames % 3) === 0) R.render(scene, cam);
   }
 
   /* finale overlay */
@@ -1294,37 +1592,57 @@ function loop(now) {
   gc.style.opacity = String(on);
   if (on > 0.001) {
     g2.clearRect(0, 0, W, H);
-    const gather = ramp(S, 0.02, 0.14);
-    const settle = eio(ramp(S, 0.06, 0.28));
-    const bd = ramp(S, 0.26, 0.44);
-    const ba = win2(S, 0.26, 0.34, 0.50, 0.58);
-    const morph = eio(ramp(S, 0.55, 0.68));
-    const nd = ramp(S, 0.68, 0.80);
-    const na = ramp(S, 0.66, 0.74);
-    const herIn = ramp(S, 0.80, 0.86);
-    const dim = 1 - ramp(S, 0.88, 0.96);
+    const gather = ramp(S, 0.02, 0.11);
+    const settle = eio(ramp(S, 0.04, 0.22));
+    /* draws in, holds, then the lines retract the way they came */
+    const bd = Math.min(ramp(S, 0.18, 0.32), 1 - ramp(S, 0.40, 0.48));
+    const ba = win2(S, 0.18, 0.25, 0.50, 0.56);
+    const loose = win2(S, 0.40, 0.46, 0.52, 0.58);
+    const mRaw = ramp(S, 0.44, 0.64);
+    const nd = ramp(S, 0.60, 0.72);
+    const na = ramp(S, 0.58, 0.68);
+    const herIn = ramp(S, 0.74, 0.79);
+    const dim = 1 - ramp(S, 0.79, 0.845);
+    const capFade = 1;
     const { s: sc, ox, oy } = fit();
     const P = p => [ox + p[0]*sc, oy + p[1]*sc];
     const pts = BIKE.map((bp, i) => {
-      const np = NAME[MAP[i]] || bp;
-      const mx = bp[0] + (np[0]-bp[0])*morph, my = bp[1] + (np[1]-bp[1])*morph;
+      const goes = MAP[i] >= 0;
+      const np = goes ? NAME[MAP[i]] : bp;
+      const mi = goes ? eio(cl01((mRaw - DELAY[i]) / (1 - 0.34))) : 0;
+      let mx = bp[0] + (np[0]-bp[0])*mi, my = bp[1] + (np[1]-bp[1])*mi;
+      /* formation breaks for a beat before it reforms */
+      mx += JIT[i][0]*loose*26; my += JIT[i][1]*loose*20;
       const sx = scatter[i][0]*SP.w, sy = scatter[i][1]*SP.h;
       return P([sx + (mx-sx)*settle, sy + (my-sy)*settle]);
     });
-    if (ba > 0) edges(BIKE_E, pts, bd, ba*0.72*dim, '#c3b6de');
-    if (na > 0) edges(NAME_E_B, pts, nd, na*0.85*dim, '#c3b6de');
+    if (ba > 0) edges(BIKE_E, pts, bd, ba*0.72*dim*capFade, '#c3b6de');
+    if (na > 0) edges(NAME_E_B, pts, nd, na*0.85*dim*capFade, '#c3b6de');
+    const letGo = 1 - ramp(S, 0.46, 0.58);
     for (let i = 0; i < pts.length; i++) {
       const b = BSET.has(i);
+      const keep = MAP[i] >= 0 ? 1 : letGo;
       dot(pts[i][0], pts[i][1], (b ? 2.6 : 1.05)*(1 + (b ? 0.34 : 0.1)*pulse),
-        gather*(b ? 0.98 : 0.6)*dim, b ? '#fff8e7' : '#e9e3d2');
-      if (b && i === 17 && na > 0.5) {
+        gather*(b ? 0.98 : 0.6)*dim*capFade*keep, b ? '#fff8e7' : '#e9e3d2');
+      if (b && i === 31 && na > 0.5) {
         g2.globalAlpha = (na - 0.5)*2*dim; g2.fillStyle = '#a8c0a8';
         g2.font = '10px Karla, sans-serif'; g2.fillText('3 A M', pts[i][0] + 11, pts[i][1] - 9);
         g2.globalAlpha = 1;
       }
     }
+    if (gather > 0 && GROWN) {
+      g2.globalAlpha = 0.34*gather*dim; g2.fillStyle = '#e9e3d2';
+      for (let i = 0; i < GROWN; i++) {
+        g2.beginPath();
+        g2.arc(ox + (seeded(i)*1.3 - 0.15)*SP.w*sc, oy + (seeded(i + 777)*1.6 - 0.2)*SP.h*sc, 0.9, 0, 6.283);
+        g2.fill();
+      }
+      g2.globalAlpha = 1;
+    }
     if (herIn > 0) {
       const hp = P(HER);
+      /* the companion: faint, unnamed, right beside her */
+      dot(hp[0] + 15, hp[1] + 8, 1.5*(1 + 0.3*pulse), herIn*dim*0.5, '#e9e3d2');
       dot(hp[0], hp[1], 3.6*(1 + 0.45*pulse), herIn*dim, '#e3a9b7');
       g2.globalAlpha = herIn*dim; g2.fillStyle = '#e3a9b7';
       g2.font = '10px Karla, sans-serif'; g2.textAlign = 'center';
@@ -1332,37 +1650,45 @@ function loop(now) {
       g2.textAlign = 'left'; g2.globalAlpha = 1;
     }
 
-    const st = S < 0.34 ? 0 : S < 0.53 ? 1 : S < 0.70 ? 2 : S < 0.84 ? 3 : 4;
+    const st = S < 0.28 ? 0 : S < 0.43 ? 1 : S < 0.66 ? 2 : S < 0.74 ? 3 : 4;
     if (st !== stage) {
       stage = st;
       const L = [C.ask, C.bike, C.nah, C.named, C.her][st];
       labK.textContent = L.k; labB.textContent = L.big;
       if (st === 2 && !calm) jolt = 1;
-      /* one and a half seconds of nothing, right before her name */
-      if (st === 2 && mute.dataset.on === '1') gsap.to(bgm, { volume: 0, duration: 0.45 });
-      if (st === 3 && mute.dataset.on === '1') gsap.to(bgm, { volume: 0.62, duration: 1.6, delay: 0.2 });
-      if (st >= 3 && !everSeen) { everSeen = true; store.set('annissa-named', '1'); }
+      /* one and a half seconds of nothing, right before her name. once per visit. */
+      if (st === 2 && !hushDone && mute.dataset.on === '1') {
+        hushDone = true; hushed = true;
+        gsap.killTweensOf(bgm);
+        gsap.to(bgm, { volume: 0, duration: 0.5, ease: 'power2.in' });
+      }
+      if ((st >= 3 || st < 2) && hushed && mute.dataset.on === '1') {
+        hushed = false;
+        gsap.killTweensOf(bgm);
+        gsap.to(bgm, { volume: 0.62, duration: 1.9, delay: 0.25, ease: 'power2.out' });
+      }
+      if (st >= 3) everSeen = true;
     }
     labEl.style.opacity = String(
-      st === 0 ? win2(S, 0.10, 0.16, 0.26, 0.32)
-      : st === 1 ? win2(S, 0.42, 0.46, 0.49, 0.52)
-      : st === 2 ? win2(S, 0.55, 0.58, 0.64, 0.68)
-      : st === 3 ? win2(S, 0.74, 0.77, 0.80, 0.83)
-      : win2(S, 0.858, 0.875, 0.893, 0.908));
-    capEl.style.opacity = String(win2(S, 0.76, 0.795, 0.825, 0.855));
+      st === 0 ? win2(S, 0.07, 0.12, 0.18, 0.23)
+      : st === 1 ? win2(S, 0.32, 0.355, 0.385, 0.42)
+      : st === 2 ? win2(S, 0.415, 0.445, 0.505, 0.545)
+      : st === 3 ? win2(S, 0.665, 0.70, 0.725, 0.755)
+      : win2(S, 0.755, 0.775, 0.798, 0.818));
     edgeEl.style.opacity = String(win2(S, 0.10, 0.18, 0.90, 0.97)*0.9);
-    if (S > 0.91) { bloom(); placeFlower(); if (S > 0.96) birdLand(); } else unbloom();
+    if (S > 0.82) { bloom(); placeFlower(); if (S > 0.87) birdLand(); } else unbloom();
     if (bloomed && headEl) headEl.setAttribute('transform',
       'rotate(' + (ptr.x * 7).toFixed(2) + ' 400 470)');
   } else {
-    labEl.style.opacity = '0'; capEl.style.opacity = '0'; edgeEl.style.opacity = '0';
+    labEl.style.opacity = '0'; edgeEl.style.opacity = '0';
     if (stage !== -1) { stage = -1; }
     if (S < 0.5) unbloom();
     spawnPetals();
-    if (everSeen || comet || petals.length) {
+    if (everSeen || comet || petals.length || bflies.length) {
       gc.style.opacity = '1';
       g2.clearRect(0, 0, W, H);
       if (everSeen) drawGhost();
+      if (bflies.length) stepBflies();
       if (comet) {
         comet.t += 0.011;
         if (comet.t >= 1) comet = null;
@@ -1396,6 +1722,7 @@ ScrollTrigger.create({ trigger: '#last', start: 'top 75%', end: 'bottom bottom',
     mute.style.opacity = o;
     document.getElementById('grain').style.opacity = st.isActive ? '0' : '.055';
     sparrow.style.display = st.isActive ? 'none' : 'block';
+    document.getElementById('tomato').style.display = st.isActive ? 'none' : 'block';
 
     if (st.isActive) {
       gsap.killTweensOf(lastDot);
@@ -1406,11 +1733,12 @@ ScrollTrigger.create({ trigger: '#last', start: 'top 75%', end: 'bottom bottom',
       const left = (isFinite(dur) && dur > 0) ? dur - bgm.currentTime : -1;
       if (!bgm.paused && left > 0 && left <= 50) {
         /* she is close enough to the end of the song: hold, and go out on the last note */
-        bgm.loop = false;
+        wantLoop = false;
         bgm.addEventListener('ended', () => fadeOutStar(4), { once: true });
       } else if (!bgm.paused) {
         /* too far from the end: bring the song and the star down together */
-        bgm.loop = false;
+        wantLoop = false;
+        gsap.killTweensOf(bgm);
         gsap.to(bgm, { volume: 0, duration: 11, ease: 'power1.in' });
         fadeOutStar(11, 1.5);
       } else {
@@ -1418,7 +1746,7 @@ ScrollTrigger.create({ trigger: '#last', start: 'top 75%', end: 'bottom bottom',
       }
     } else {
       closing = false;
-      bgm.loop = true;
+      wantLoop = true;
       gsap.killTweensOf(lastDot);
       gsap.to(lastDot, { opacity: 0, duration: 0.8 });
       if (mute.dataset.on === '1' && bgm.volume < 0.6) gsap.to(bgm, { volume: 0.62, duration: 1.5 });
@@ -1461,6 +1789,16 @@ ScrollTrigger.create({ trigger: '#sig', start: 'top 80%', once: true, onEnter: (
       gsap.to(hint, { opacity: 0, duration: 0.4 });
       gsap.to(lastDot, { scale: 1.3, duration: 0.8 });
       gsap.to(msg, { opacity: 1, duration: 1.6 });
+      /* she earned this one */
+      const bf = document.getElementById('bfly');
+      const y0 = innerHeight*0.62, d = 'M-60 ' + y0 +
+        ' C ' + (innerWidth*0.22) + ' ' + (y0 - innerHeight*0.22) + ', ' + (innerWidth*0.42) + ' ' + (y0 + innerHeight*0.10) + ', ' + (innerWidth*0.52) + ' ' + (innerHeight*0.46) +
+        ' S ' + (innerWidth*0.86) + ' ' + (innerHeight*0.18) + ', ' + (innerWidth*1.15) + ' ' + (innerHeight*0.30);
+      gsap.set(bf, { opacity: 0 });
+      gsap.to(bf, { opacity: 1, duration: 1.4, delay: 1.2 });
+      gsap.to('#bfly .lw', { scaleX: 0.2, duration: 0.24, yoyo: true, repeat: -1, ease: 'sine.inOut' });
+      gsap.to('#bfly .rw', { scaleX: 0.2, duration: 0.24, yoyo: true, repeat: -1, ease: 'sine.inOut' });
+      flyAlong(bf, d, 15, 'none', () => gsap.to(bf, { opacity: 0, duration: 1.2 }));
     }, 3000);
   };
   const up = () => {
