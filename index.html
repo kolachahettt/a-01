@@ -224,8 +224,10 @@ window.CONTENT = {
     { file: "3-cotton.jpg", side: "l", cap: "cutest you've ever looked.", desig: "plate iii" }
   ],
 
-  bike: { k: "figure one", big: "Of course it's the bike." },
-  named: { k: "figure two", big: "Same eight stars. Look again." },
+  ask:   { k: "one question", big: "So what do I like the most?" },
+  bike:  { k: "figure one", big: "Of course. It's the bike." },
+  nah:   { k: "wrong answer", big: "Nah." },
+  named: { k: "figure two", big: "This. Obviously this." },
   chart: {
     designation: "A\u201301",
     stars: "32, plus her",
@@ -806,16 +808,18 @@ function loop(now) {
       g2.textAlign = 'left'; g2.globalAlpha = 1;
     }
 
-    const st = S < 0.52 ? 0 : S < 0.80 ? 1 : 2;
+    const st = S < 0.34 ? 0 : S < 0.53 ? 1 : S < 0.70 ? 2 : S < 0.84 ? 3 : 4;
     if (st !== stage) {
       stage = st;
-      const L = st === 0 ? C.bike : st === 1 ? C.named : C.her;
+      const L = [C.ask, C.bike, C.nah, C.named, C.her][st];
       labK.textContent = L.k; labB.textContent = L.big;
     }
     labEl.style.opacity = String(
-      st === 0 ? win2(S, 0.44, 0.48, 0.50, 0.55)
-      : st === 1 ? win2(S, 0.74, 0.78, 0.79, 0.83)
-      : win2(S, 0.81, 0.85, 0.88, 0.93));
+      st === 0 ? win2(S, 0.10, 0.16, 0.26, 0.32)
+      : st === 1 ? win2(S, 0.42, 0.46, 0.49, 0.52)
+      : st === 2 ? win2(S, 0.55, 0.58, 0.64, 0.68)
+      : st === 3 ? win2(S, 0.74, 0.77, 0.80, 0.83)
+      : win2(S, 0.85, 0.875, 0.895, 0.915));
     capEl.style.opacity = String(win2(S, 0.78, 0.82, 0.87, 0.92));
     edgeEl.style.opacity = String(win2(S, 0.10, 0.18, 0.90, 0.97)*0.9);
     if (S > 0.90) { bloom(); placeFlower(); } else unbloom();
