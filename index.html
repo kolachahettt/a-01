@@ -26,8 +26,9 @@
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{-webkit-text-size-adjust:100%}
+html{overflow-x:clip}   /* clip, NOT hidden: hidden makes body a scroll container and kills position:sticky on mobile */
 html,body{margin:0;padding:0;background:var(--void)}
-body{font-family:var(--sans);font-weight:300;color:var(--cream);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+body{font-family:var(--sans);font-weight:300;color:var(--cream);-webkit-font-smoothing:antialiased}
 body.held{overflow:hidden;height:100svh}
 #flight,#glass{position:fixed;inset:0;display:block}
 #flight{z-index:0}
@@ -189,7 +190,7 @@ body.held{overflow:hidden;height:100svh}
   font-family:var(--hand);font-size:clamp(1.3rem,6vw,1.7rem);color:var(--pink);opacity:0}
 
 /* arrival */
-#flash{position:fixed;inset:0;z-index:6;pointer-events:none;background:#fff6df;opacity:0;mix-blend-mode:screen}
+#flash{position:fixed;inset:0;z-index:6;pointer-events:none;background:#fff6df;opacity:0;mix-blend-mode:screen;display:none}
 
 /* the last frame */
 #last{height:135svh;position:relative;z-index:5;background:var(--void)}
@@ -211,6 +212,11 @@ html.bare #flower{position:static;transform:none;opacity:1;display:block;margin:
 html.bare #last{height:auto;padding:14vh 0}
 html.bare #lastdot{opacity:1}
 html.bare .win img{clip-path:none!important}
+
+/* on a phone these three cost more than they are worth and cause the scroll to stutter */
+html.touch .beat .line{filter:none}          /* a GPU blur pass on huge text, every frame */
+html.touch #grain{display:none}              /* a layer 220% of the screen, moved 5x a second */
+html.touch #mute{backdrop-filter:none;background:rgba(6,9,28,.72)}
 
 @media (prefers-reduced-motion:reduce){
   .beat .k,.beat .said,.beat .line .w,.pl figure,#outro p,#usplate{opacity:1!important;transform:none!important}
@@ -469,6 +475,8 @@ const threeReady = import('three').then(m => m).catch(() => null);
 const C = window.CONTENT;
 const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const small = matchMedia('(max-width: 760px)').matches;
+const touch = matchMedia('(hover: none) and (pointer: coarse)').matches;
+if (touch) document.documentElement.classList.add('touch');
 const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 const cl01 = v => v < 0 ? 0 : v > 1 ? 1 : v;
 const ramp = (x,a,b) => cl01((x-a)/(b-a));
@@ -863,30 +871,34 @@ function buildFlight(T) {
     scene.add(pt); shells.push(pt);
   });
 
-  const L = small ? 700 : 1300;
-  const lp = new Float32Array(L*6), lc = new Float32Array(L*6), tail = new Float32Array(L*2);
-  for (let i = 0; i < L; i++) {
-    const k = (Math.random()*N)|0;
-    for (let e = 0; e < 2; e++) {
-      lp[i*6+e*3] = pos[k*3]; lp[i*6+e*3+1] = pos[k*3+1]; lp[i*6+e*3+2] = pos[k*3+2];
-      lc[i*6+e*3] = col[k*3]; lc[i*6+e*3+1] = col[k*3+1]; lc[i*6+e*3+2] = col[k*3+2];
-      tail[i*2+e] = e;
+  /* motion streaks: 1300 line segments on a custom shader. desktop only.
+     this was the heaviest thing in the scene and it was running on her phone. */
+  if (!small) {
+    const L = small ? 700 : 1300;
+    const lp = new Float32Array(L*6), lc = new Float32Array(L*6), tail = new Float32Array(L*2);
+    for (let i = 0; i < L; i++) {
+      const k = (Math.random()*N)|0;
+      for (let e = 0; e < 2; e++) {
+        lp[i*6+e*3] = pos[k*3]; lp[i*6+e*3+1] = pos[k*3+1]; lp[i*6+e*3+2] = pos[k*3+2];
+        lc[i*6+e*3] = col[k*3]; lc[i*6+e*3+1] = col[k*3+1]; lc[i*6+e*3+2] = col[k*3+2];
+        tail[i*2+e] = e;
+      }
     }
+    const lg = new THREE.BufferGeometry();
+    lg.setAttribute('position', new THREE.BufferAttribute(lp, 3));
+    lg.setAttribute('color', new THREE.BufferAttribute(lc, 3));
+    lg.setAttribute('tail', new THREE.BufferAttribute(tail, 1));
+    sU = { uLen: { value: 0 }, uA: { value: 0 } };
+    streaks = new THREE.LineSegments(lg, new THREE.ShaderMaterial({
+      uniforms: sU, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
+      vertexShader: `attribute float tail; attribute vec3 color; uniform float uLen; varying vec3 vC;
+        void main(){ vC = color; vec3 p = position; p.z += tail * uLen;
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0); }`,
+      fragmentShader: `precision mediump float; uniform float uA; varying vec3 vC;
+        void main(){ gl_FragColor = vec4(vC, uA); }`
+    }));
+    scene.add(streaks);
   }
-  const lg = new THREE.BufferGeometry();
-  lg.setAttribute('position', new THREE.BufferAttribute(lp, 3));
-  lg.setAttribute('color', new THREE.BufferAttribute(lc, 3));
-  lg.setAttribute('tail', new THREE.BufferAttribute(tail, 1));
-  sU = { uLen: { value: 0 }, uA: { value: 0 } };
-  streaks = new THREE.LineSegments(lg, new THREE.ShaderMaterial({
-    uniforms: sU, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
-    vertexShader: `attribute float tail; attribute vec3 color; uniform float uLen; varying vec3 vC;
-      void main(){ vC = color; vec3 p = position; p.z += tail * uLen;
-      gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0); }`,
-    fragmentShader: `precision mediump float; uniform float uA; varying vec3 vC;
-      void main(){ gl_FragColor = vec4(vC, uA); }`
-  }));
-  scene.add(streaks);
 
   const neb = [
     { c: 'rgba(227,169,183,.30)', s: 1500, z: -420 },
@@ -895,7 +907,7 @@ function buildFlight(T) {
     { c: 'rgba(242,217,160,.24)', s: 2100, z: -2080 },
     { c: 'rgba(195,182,222,.24)', s: 1700, z: -2600 }
   ];
-  neb.forEach((n, i) => {
+  (small ? neb.slice(0, 3) : neb).forEach((n, i) => {
     const m = new THREE.SpriteMaterial({ map: soft(0.0, n.c, 'rgba(6,9,28,0)'),
       transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: 0.62 + 0.32 * nightF });
     const sp = new THREE.Sprite(m);
@@ -954,7 +966,15 @@ function resize() {
   if (webgl) { R.setSize(W, H); cam.aspect = W/H; cam.updateProjectionMatrix(); }
 }
 resize();
-addEventListener('resize', () => { resize(); if (window.ScrollTrigger) ScrollTrigger.refresh(); });
+let lastVW = innerWidth, lastVH = innerHeight;
+addEventListener('resize', () => {
+  /* on a phone the URL bar hiding changes innerHeight by ~60-110px and fires resize
+     constantly while scrolling. rebuilding everything mid-scroll is the jump she saw. */
+  if (Math.abs(innerWidth - lastVW) < 2 && Math.abs(innerHeight - lastVH) < 140) return;
+  lastVW = innerWidth; lastVH = innerHeight;
+  resize();
+  if (window.ScrollTrigger) ScrollTrigger.refresh();
+});
 
 function fit() {
   const s = Math.min(W*0.9/SP.w, H*0.56/SP.h);
@@ -1101,7 +1121,7 @@ function startTilt() {
 /* ---------------- scroll ---------------- */
 gsap.registerPlugin(ScrollTrigger);
 let lenis = null;
-if (!calm && window.Lenis) {
+if (!calm && !touch && window.Lenis) {
   lenis = new Lenis({ duration: 1.4, smoothWheel: true, touchMultiplier: 1.15, wheelMultiplier: 0.85 });
   lenis.on('scroll', ScrollTrigger.update);
   gsap.ticker.add(t => lenis.raf(t*1000));
@@ -1245,8 +1265,11 @@ ScrollTrigger.create({ trigger: '#finale', start: 'top top', end: 'bottom bottom
     inFinale = s.isActive;
     if (s.isActive && !flashed && !calm) {
       flashed = true;
-      gsap.timeline().to('#flash', { opacity: 0.4, duration: 0.16, ease: 'power2.out' })
-        .to('#flash', { opacity: 0, duration: 1.2, ease: 'power2.in' });
+      const fl = document.getElementById('flash');
+      fl.style.display = 'block';
+      gsap.timeline({ onComplete: () => { fl.style.display = 'none'; } })
+        .to(fl, { opacity: 0.4, duration: 0.16, ease: 'power2.out' })
+        .to(fl, { opacity: 0, duration: 1.2, ease: 'power2.in' });
     }
   } });
 
@@ -1606,8 +1629,10 @@ function loop(now) {
       cam.position.y += (Math.random() - 0.5) * jolt * 9;
     }
     shells.forEach(sh => { sh.material.size = 3.4 + pulse*1.5; });
-    sU.uLen.value = Math.min(150, vel*3.1) + jolt*300;
-    sU.uA.value = Math.min(0.5, vel*0.014) + jolt*0.45;
+    if (sU) {
+      sU.uLen.value = Math.min(150, vel*3.1) + jolt*300;
+      sU.uA.value = Math.min(0.5, vel*0.014) + jolt*0.45;
+    }
     nebula.forEach((n, i) => { n.material.rotation = t*0.006*(i%2 ? 1 : -1); });
     waypoints.forEach((w, i) => {
       const d = Math.abs(w.position.z - z);
@@ -1620,8 +1645,10 @@ function loop(now) {
         flare.scale.set(560*(1 + near*0.5), 13*(1 + pulse*0.5), 1);
       }
     });
-    const mb = vel * 0.03;
-    rootStyle.setProperty('--mblur', (mb < 0.09 ? 0 : Math.min(1.15, mb)).toFixed(2) + 'px');
+    if (!touch) {
+      const mb = vel * 0.03;
+      rootStyle.setProperty('--mblur', (mb < 0.09 ? 0 : Math.min(1.15, mb)).toFixed(2) + 'px');
+    }
     /* camera is parked through the finale, so the corridor only needs a third of the frames */
     if (!inFinale || S < 0.2 || (frames % 3) === 0) R.render(scene, cam);
   }
