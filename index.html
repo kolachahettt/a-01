@@ -94,6 +94,37 @@ body.held{overflow:hidden;height:100svh}
 .pl .meta{display:flex;justify-content:space-between;gap:.8rem;margin-top:.55rem}
 .pl .cap{font-family:var(--hand);font-size:1.2rem;color:var(--soft);line-height:1.3}
 
+/* a garden that fills the screen */
+#garden{position:relative;min-height:118svh;overflow:hidden;display:flex;align-items:center;
+  justify-content:center;padding:0 7vw;text-align:center;touch-action:manipulation}
+#beds{position:absolute;inset:0;pointer-events:none}
+.bloom{position:absolute;height:auto;overflow:visible;will-change:transform,opacity}
+#garden .body{position:relative;z-index:2;pointer-events:none;
+  padding:2.4rem 2rem;border-radius:50%;
+  background:radial-gradient(ellipse at center,rgba(6,9,28,.82) 0%,rgba(6,9,28,.6) 48%,rgba(6,9,28,0) 76%)}
+#garden .k{opacity:0;display:block;margin-bottom:.9rem}
+#gdhint{opacity:0;color:rgba(244,239,228,.5);letter-spacing:.24em;margin:0}
+#gdmore{font-family:var(--hand);font-size:clamp(1.3rem,5.6vw,1.7rem);color:var(--butter);
+  margin:.9rem 0 0;opacity:0}
+
+/* the code: pointless on the device you would scan it with, so touch never sees it */
+#scan{max-width:31rem;width:100%;margin:3.2rem 0 0;display:flex;flex-direction:column;align-items:flex-start}
+html.touch #scan{display:none}
+#scan svg{width:132px;height:132px;display:block;margin:.9rem 0 0;border-radius:6px;opacity:0}
+#scanhint,#scanlab{opacity:0;color:rgba(244,239,228,.45)}
+#scanlab{margin:.8rem 0 0;letter-spacing:.24em}
+#scannote{font-family:var(--hand);font-size:clamp(1.15rem,4.6vw,1.4rem);color:var(--butter);
+  margin:.7rem 0 0;opacity:0}
+
+/* the letter */
+#letter{max-width:31rem;width:100%;margin:3.4rem 0 0;display:flex;flex-direction:column;align-items:flex-start}
+#letter .chart{opacity:0;margin-bottom:1rem}
+#envsvg{width:min(62vw,260px);height:auto;overflow:visible;display:block;cursor:pointer;
+  -webkit-tap-highlight-color:transparent;opacity:0}
+#envsvg .flap{transform-box:view-box}
+#envsvg{width:min(74vw,300px)}
+#envsvg .pressed,#envsvg .ink,#envsvg .doodle,#envsvg .flit,#envsvg .chip{opacity:0}
+
 /* finale */
 #finale{height:640svh;position:relative}
 #pin{position:sticky;top:0;height:100svh;overflow:hidden}
@@ -201,7 +232,7 @@ body.held{overflow:hidden;height:100svh}
 
 /* if the CDNs are gone one day, everything still shows, just still */
 html.bare .beat .k,html.bare .said,html.bare .beat .line .w,html.bare .pl figure,
-html.bare #outro p,html.bare #usplate,html.bare #lab{opacity:1!important;transform:none!important;filter:none!important}
+html.bare #outro p,html.bare #usplate,html.bare #lab,html.bare #garden .k,html.bare #gdmore,html.bare .bloom,html.bare #envsvg,html.bare #scan svg,html.bare #scanhint,html.bare #scanlab,html.bare #scannote,html.bare #letter .chart,html.bare .bl{opacity:1!important;transform:none!important;filter:none!important}
 html.bare #sig,html.bare #motto{clip-path:none!important;opacity:1!important}
 html.bare #flight,html.bare #glass,html.bare #grain,html.bare #birds,html.bare #flash{display:none}
 html.bare #finale{height:auto}
@@ -422,6 +453,13 @@ window.CONTENT = {
 
   later: "It has been {n} since I built this page. It still opens. It is going to keep opening.",
 
+  scan: { k: "on a laptop?", hint: "point your phone at this", note: "A prescription. It is different every time, and none of it is valid." },
+  garden: { k: "for you", hint: "tap anywhere", more: "It keeps growing. So do you." },
+  ps: { hint: "one more thing", lines: [
+    "P.S. \u2014 I know you'll read this more than once.",
+    "That's why I hid things in it. Keep looking."
+  ] },
+
   seventh: { k: "seven times", body: "Seven times you've opened this. I built it thinking you'd read it once. Come back as often as you want. It isn't going anywhere and neither am I." },
   patient: "You didn't skim it. The page counted, and I'm telling you because it matters to me that you didn't.",
   held: { hint: "hold", body: "You held on. Of course you did. Goodnight, Chaku." },
@@ -570,6 +608,15 @@ const beat = (b,i) => `<section class="beat ${b.pos}" data-b="${i}">
 
 document.getElementById('doc').innerHTML =
 order.map(o => typeof o === 'number' ? beat(beats[o], o) : o === 'note' ? noteBlock() : plate(Number(String(o).slice(1)))).join('') + `
+<section id="garden">
+  <div id="beds"></div>
+  <div class="body">
+    <span class="chart k">${esc(C.garden.k)}</span>
+    <p class="chart hint" id="gdhint">${esc(C.garden.hint)}</p>
+    <p class="said" id="gdmore">${esc(C.garden.more)}</p>
+  </div>
+</section>
+
 <section id="finale">
   <div id="pin">
     <div id="edge"><span class="n">N</span><span class="tl">RA 19H 42M</span><span class="tr">DEC +38\u00b0</span><span class="bl">EPOCH 2003</span></div>
@@ -610,12 +657,90 @@ ${IS_BDAY ? `<section class="beat p-mid" data-b="0" id="bday">
   ${BLINE ? `<p class="bnote">${esc(BLINE)}</p>` : ''}
   <p class="wave">${esc(C.waveLine)}</p>
   <p id="sig">${esc(C.signature)}</p>
+  <div id="letter">
+    <span class="chart" id="lthint">${esc(C.ps.hint)}</span>
+    <svg id="envsvg" viewBox="0 0 340 345" role="img" aria-label="A sealed letter">
+      <rect x="24" y="150" width="292" height="172" rx="10" fill="#e6d9bd"/>
+      <g class="paper"><g class="sheet">
+        <rect x="52" y="162" width="236" height="156" rx="4" fill="#faf5e8"/>
+        <rect x="52" y="162" width="236" height="156" rx="4" fill="none" stroke="#e4d8c0" stroke-width="2"/>
+        <path class="rule" d="M74 194 L250 194" stroke="#ddd0b4" stroke-width="2.4" stroke-linecap="round"/><path class="rule" d="M74 218 L266 218" stroke="#ddd0b4" stroke-width="2.4" stroke-linecap="round"/><path class="rule" d="M74 240 L250 240" stroke="#ddd0b4" stroke-width="2.4" stroke-linecap="round"/><path class="rule" d="M74 262 L266 262" stroke="#ddd0b4" stroke-width="2.4" stroke-linecap="round"/><path class="rule" d="M74 284 L250 284" stroke="#ddd0b4" stroke-width="2.4" stroke-linecap="round"/>
+        <text class="ink" x="74" y="190" font-family="Caveat, cursive" font-size="16" fill="#6b5c44">Annissa,</text><text class="ink" x="74" y="216" font-family="Caveat, cursive" font-size="15" fill="#6b5c44">I couldn't sit next to your bed,</text><text class="ink" x="74" y="238" font-family="Caveat, cursive" font-size="15" fill="#6b5c44">so I built you somewhere to sit.</text><text class="ink" x="74" y="260" font-family="Caveat, cursive" font-size="15" fill="#6b5c44">There are things hidden in here.</text><text class="ink" x="74" y="282" font-family="Caveat, cursive" font-size="15" fill="#6b5c44">Come back and find them.</text>
+        <text class="ink" x="74" y="306" font-family="Caveat, cursive" font-size="19" fill="#6b5c44">— Het</text>
+        <g class="doodle"><ellipse cx="258" cy="284" rx="3.2" ry="7" fill="#e0ac3e" transform="rotate(0 258 292)"/><ellipse cx="258" cy="284" rx="3.2" ry="7" fill="#e0ac3e" transform="rotate(45 258 292)"/><ellipse cx="258" cy="284" rx="3.2" ry="7" fill="#e0ac3e" transform="rotate(90 258 292)"/><ellipse cx="258" cy="284" rx="3.2" ry="7" fill="#e0ac3e" transform="rotate(135 258 292)"/><ellipse cx="258" cy="284" rx="3.2" ry="7" fill="#e0ac3e" transform="rotate(180 258 292)"/><ellipse cx="258" cy="284" rx="3.2" ry="7" fill="#e0ac3e" transform="rotate(225 258 292)"/><ellipse cx="258" cy="284" rx="3.2" ry="7" fill="#e0ac3e" transform="rotate(270 258 292)"/><ellipse cx="258" cy="284" rx="3.2" ry="7" fill="#e0ac3e" transform="rotate(315 258 292)"/><circle cx="258" cy="292" r="4.6" fill="#7a5424"/></g>
+      </g></g>
+      <path d="M24 238 L170 320 L316 238 L316 311 Q316 322 305 322 L35 322 Q24 322 24 311 Z" fill="#d8caa8"/>
+      <path d="M24 238 L170 320 L316 238" fill="none" stroke="#c7b794" stroke-width="2"/>
+      <text x="60" y="300" font-family="Caveat, cursive" font-size="27" fill="#9a8a68">Annissa</text>
+      <g class="stamp">
+        <rect x="252" y="164" width="46" height="58" fill="#f4ecd8"/><circle cx="252.0" cy="164" r="2.6" fill="#e6d9bd"/><circle cx="259.6" cy="164" r="2.6" fill="#e6d9bd"/><circle cx="267.2" cy="164" r="2.6" fill="#e6d9bd"/><circle cx="274.8" cy="164" r="2.6" fill="#e6d9bd"/><circle cx="282.4" cy="164" r="2.6" fill="#e6d9bd"/><circle cx="290.0" cy="164" r="2.6" fill="#e6d9bd"/><circle cx="297.6" cy="164" r="2.6" fill="#e6d9bd"/><circle cx="252.0" cy="222" r="2.6" fill="#e6d9bd"/><circle cx="259.6" cy="222" r="2.6" fill="#e6d9bd"/><circle cx="267.2" cy="222" r="2.6" fill="#e6d9bd"/><circle cx="274.8" cy="222" r="2.6" fill="#e6d9bd"/><circle cx="282.4" cy="222" r="2.6" fill="#e6d9bd"/><circle cx="290.0" cy="222" r="2.6" fill="#e6d9bd"/><circle cx="297.6" cy="222" r="2.6" fill="#e6d9bd"/><circle cx="252" cy="164.0" r="2.6" fill="#e6d9bd"/><circle cx="252" cy="172.3" r="2.6" fill="#e6d9bd"/><circle cx="252" cy="180.6" r="2.6" fill="#e6d9bd"/><circle cx="252" cy="188.9" r="2.6" fill="#e6d9bd"/><circle cx="252" cy="197.2" r="2.6" fill="#e6d9bd"/><circle cx="252" cy="205.5" r="2.6" fill="#e6d9bd"/><circle cx="252" cy="213.8" r="2.6" fill="#e6d9bd"/><circle cx="252" cy="222.1" r="2.6" fill="#e6d9bd"/><circle cx="298" cy="164.0" r="2.6" fill="#e6d9bd"/><circle cx="298" cy="172.3" r="2.6" fill="#e6d9bd"/><circle cx="298" cy="180.6" r="2.6" fill="#e6d9bd"/><circle cx="298" cy="188.9" r="2.6" fill="#e6d9bd"/><circle cx="298" cy="197.2" r="2.6" fill="#e6d9bd"/><circle cx="298" cy="205.5" r="2.6" fill="#e6d9bd"/><circle cx="298" cy="213.8" r="2.6" fill="#e6d9bd"/><circle cx="298" cy="222.1" r="2.6" fill="#e6d9bd"/>
+        <rect x="258" y="170" width="34" height="46" fill="#dfe8ee"/><ellipse cx="275" cy="182" rx="3.4" ry="7.6" fill="#e8b64a" transform="rotate(0 275 193)"/><ellipse cx="275" cy="182" rx="3.4" ry="7.6" fill="#e8b64a" transform="rotate(45 275 193)"/><ellipse cx="275" cy="182" rx="3.4" ry="7.6" fill="#e8b64a" transform="rotate(90 275 193)"/><ellipse cx="275" cy="182" rx="3.4" ry="7.6" fill="#e8b64a" transform="rotate(135 275 193)"/><ellipse cx="275" cy="182" rx="3.4" ry="7.6" fill="#e8b64a" transform="rotate(180 275 193)"/><ellipse cx="275" cy="182" rx="3.4" ry="7.6" fill="#e8b64a" transform="rotate(225 275 193)"/><ellipse cx="275" cy="182" rx="3.4" ry="7.6" fill="#e8b64a" transform="rotate(270 275 193)"/><ellipse cx="275" cy="182" rx="3.4" ry="7.6" fill="#e8b64a" transform="rotate(315 275 193)"/>
+        <circle cx="275" cy="193" r="6.5" fill="#7a5424"/>
+        <g stroke="#8e9aa6" stroke-width="2" fill="none" opacity=".7">
+          <circle cx="243" cy="178" r="20"/><circle cx="243" cy="178" r="14"/><path d="M223 192 L300 166"/>
+        </g>
+      </g>
+      <g class="flap"><path d="M24 154 L170 250 L316 154 Q316 150 310 150 L30 150 Q24 150 24 154 Z" fill="#d2c29c"/>
+        <path d="M24 154 L170 250 L316 154" fill="none" stroke="#c0ae86" stroke-width="2"/></g>
+      <g class="seal">
+        <path class="sl" d="M170 222 A 20 20 0 0 0 170 262 Z" fill="#a8443b"/>
+        <path class="sr" d="M170 222 A 20 20 0 0 1 170 262 Z" fill="#9b3d34"/>
+        <circle cx="170" cy="242" r="12" fill="none" stroke="#c25a4e" stroke-width="2.5"/>
+        <path d="M164 236 L176 248 M176 236 L164 248" stroke="#c25a4e" stroke-width="3" stroke-linecap="round"/>
+      </g>
+      <g class="confetti"><rect class="chip" x="177" y="236" width="5" height="4" rx="1" fill="#a8c8ea"/><rect class="chip" x="158" y="239" width="3" height="6" rx="1" fill="#f2d9a0"/><rect class="chip" x="163" y="233" width="4" height="4" rx="1" fill="#e3a9b7"/><rect class="chip" x="170" y="240" width="3" height="6" rx="1" fill="#e3a9b7"/><rect class="chip" x="158" y="243" width="3" height="4" rx="1" fill="#c3b6de"/><rect class="chip" x="163" y="244" width="4" height="3" rx="1" fill="#f2d9a0"/><rect class="chip" x="162" y="241" width="5" height="4" rx="1" fill="#e3a9b7"/><rect class="chip" x="162" y="232" width="3" height="3" rx="1" fill="#e3a9b7"/><rect class="chip" x="163" y="234" width="4" height="4" rx="1" fill="#e3a9b7"/><rect class="chip" x="175" y="242" width="5" height="3" rx="1" fill="#e3a9b7"/><rect class="chip" x="164" y="238" width="4" height="3" rx="1" fill="#c3b6de"/><rect class="chip" x="171" y="234" width="3" height="4" rx="1" fill="#f2d9a0"/><rect class="chip" x="168" y="236" width="5" height="6" rx="1" fill="#f2d9a0"/><rect class="chip" x="177" y="242" width="5" height="4" rx="1" fill="#f2d9a0"/></g>
+      <g class="flits"><g class="flit" transform="translate(144 252)">
+        <g class="wg">
+          <path d="M0 0 C -13 -11 -17 -2 -12 5 C -8 10 -3 7 0 0 Z" fill="#8fb6e0"/>
+          <path d="M0 0 C 13 -11 17 -2 12 5 C 8 10 3 7 0 0 Z" fill="#a8c8ea"/>
+          <path d="M0 0 C -10 4 -11 11 -6 13 C -2 14 -1 8 0 0 Z" fill="#7ba5d4"/>
+          <path d="M0 0 C 10 4 11 11 6 13 C 2 14 1 8 0 0 Z" fill="#94b9e0"/>
+        </g>
+        <ellipse cx="0" cy="2" rx="1.5" ry="6" fill="#3d5a80"/>
+      </g><g class="flit" transform="translate(162 248)">
+        <g class="wg">
+          <path d="M0 0 C -13 -11 -17 -2 -12 5 C -8 10 -3 7 0 0 Z" fill="#8fb6e0"/>
+          <path d="M0 0 C 13 -11 17 -2 12 5 C 8 10 3 7 0 0 Z" fill="#a8c8ea"/>
+          <path d="M0 0 C -10 4 -11 11 -6 13 C -2 14 -1 8 0 0 Z" fill="#7ba5d4"/>
+          <path d="M0 0 C 10 4 11 11 6 13 C 2 14 1 8 0 0 Z" fill="#94b9e0"/>
+        </g>
+        <ellipse cx="0" cy="2" rx="1.5" ry="6" fill="#3d5a80"/>
+      </g><g class="flit" transform="translate(182 251)">
+        <g class="wg">
+          <path d="M0 0 C -13 -11 -17 -2 -12 5 C -8 10 -3 7 0 0 Z" fill="#8fb6e0"/>
+          <path d="M0 0 C 13 -11 17 -2 12 5 C 8 10 3 7 0 0 Z" fill="#a8c8ea"/>
+          <path d="M0 0 C -10 4 -11 11 -6 13 C -2 14 -1 8 0 0 Z" fill="#7ba5d4"/>
+          <path d="M0 0 C 10 4 11 11 6 13 C 2 14 1 8 0 0 Z" fill="#94b9e0"/>
+        </g>
+        <ellipse cx="0" cy="2" rx="1.5" ry="6" fill="#3d5a80"/>
+      </g><g class="flit" transform="translate(200 254)">
+        <g class="wg">
+          <path d="M0 0 C -13 -11 -17 -2 -12 5 C -8 10 -3 7 0 0 Z" fill="#8fb6e0"/>
+          <path d="M0 0 C 13 -11 17 -2 12 5 C 8 10 3 7 0 0 Z" fill="#a8c8ea"/>
+          <path d="M0 0 C -10 4 -11 11 -6 13 C -2 14 -1 8 0 0 Z" fill="#7ba5d4"/>
+          <path d="M0 0 C 10 4 11 11 6 13 C 2 14 1 8 0 0 Z" fill="#94b9e0"/>
+        </g>
+        <ellipse cx="0" cy="2" rx="1.5" ry="6" fill="#3d5a80"/>
+      </g></g>
+      <g class="pressed">
+        <path d="M170 252 L170 278" stroke="#6f9b63" stroke-width="3" stroke-linecap="round"/>
+        <ellipse cx="170" cy="242" rx="4.6" ry="9" fill="#e3a9b7" transform="rotate(0 170 252)"/><ellipse cx="170" cy="242" rx="4.6" ry="9" fill="#e3a9b7" transform="rotate(60 170 252)"/><ellipse cx="170" cy="242" rx="4.6" ry="9" fill="#e3a9b7" transform="rotate(120 170 252)"/><ellipse cx="170" cy="242" rx="4.6" ry="9" fill="#e3a9b7" transform="rotate(180 170 252)"/><ellipse cx="170" cy="242" rx="4.6" ry="9" fill="#e3a9b7" transform="rotate(240 170 252)"/><ellipse cx="170" cy="242" rx="4.6" ry="9" fill="#e3a9b7" transform="rotate(300 170 252)"/>
+        <circle cx="170" cy="252" r="4" fill="#c9788c"/>
+      </g>
+    </svg>
+  </div>
   <div id="secret"><p class="chart">${esc(C.secret.k)}</p><p>${esc(C.secret.body)}</p></div>
   <div id="seventh"><p class="chart">${esc(C.seventh.k)}</p><p>${esc(C.seventh.body)}</p></div>
   <div id="slow"><p>${esc(C.patient)}</p></div>
   <div class="acts">
     <button id="again">fly it again</button>
     ${C.replyTo ? `<a href="mailto:${esc(C.replyTo)}?subject=${encodeURIComponent(C.replySubject)}">tell him</a>` : ''}
+  </div>
+  <div id="scan">
+    <span class="chart" id="scanhint">${esc(C.scan.k)}</span>
+    <svg viewBox="0 0 37 37" shape-rendering="crispEdges" aria-label="Scan to open on your phone"><rect width="37" height="37" rx="2" fill="#f4efe4"/><path d="M4 4h1v1h-1zM5 4h1v1h-1zM6 4h1v1h-1zM7 4h1v1h-1zM8 4h1v1h-1zM9 4h1v1h-1zM10 4h1v1h-1zM13 4h1v1h-1zM18 4h1v1h-1zM20 4h1v1h-1zM21 4h1v1h-1zM22 4h1v1h-1zM23 4h1v1h-1zM24 4h1v1h-1zM26 4h1v1h-1zM27 4h1v1h-1zM28 4h1v1h-1zM29 4h1v1h-1zM30 4h1v1h-1zM31 4h1v1h-1zM32 4h1v1h-1zM4 5h1v1h-1zM10 5h1v1h-1zM12 5h1v1h-1zM13 5h1v1h-1zM15 5h1v1h-1zM16 5h1v1h-1zM17 5h1v1h-1zM19 5h1v1h-1zM20 5h1v1h-1zM22 5h1v1h-1zM24 5h1v1h-1zM26 5h1v1h-1zM32 5h1v1h-1zM4 6h1v1h-1zM6 6h1v1h-1zM7 6h1v1h-1zM8 6h1v1h-1zM10 6h1v1h-1zM13 6h1v1h-1zM14 6h1v1h-1zM15 6h1v1h-1zM20 6h1v1h-1zM23 6h1v1h-1zM24 6h1v1h-1zM26 6h1v1h-1zM28 6h1v1h-1zM29 6h1v1h-1zM30 6h1v1h-1zM32 6h1v1h-1zM4 7h1v1h-1zM6 7h1v1h-1zM7 7h1v1h-1zM8 7h1v1h-1zM10 7h1v1h-1zM12 7h1v1h-1zM13 7h1v1h-1zM15 7h1v1h-1zM17 7h1v1h-1zM18 7h1v1h-1zM21 7h1v1h-1zM26 7h1v1h-1zM28 7h1v1h-1zM29 7h1v1h-1zM30 7h1v1h-1zM32 7h1v1h-1zM4 8h1v1h-1zM6 8h1v1h-1zM7 8h1v1h-1zM8 8h1v1h-1zM10 8h1v1h-1zM14 8h1v1h-1zM16 8h1v1h-1zM17 8h1v1h-1zM18 8h1v1h-1zM23 8h1v1h-1zM24 8h1v1h-1zM26 8h1v1h-1zM28 8h1v1h-1zM29 8h1v1h-1zM30 8h1v1h-1zM32 8h1v1h-1zM4 9h1v1h-1zM10 9h1v1h-1zM12 9h1v1h-1zM14 9h1v1h-1zM19 9h1v1h-1zM20 9h1v1h-1zM26 9h1v1h-1zM32 9h1v1h-1zM4 10h1v1h-1zM5 10h1v1h-1zM6 10h1v1h-1zM7 10h1v1h-1zM8 10h1v1h-1zM9 10h1v1h-1zM10 10h1v1h-1zM12 10h1v1h-1zM14 10h1v1h-1zM16 10h1v1h-1zM18 10h1v1h-1zM20 10h1v1h-1zM22 10h1v1h-1zM24 10h1v1h-1zM26 10h1v1h-1zM27 10h1v1h-1zM28 10h1v1h-1zM29 10h1v1h-1zM30 10h1v1h-1zM31 10h1v1h-1zM32 10h1v1h-1zM16 11h1v1h-1zM19 11h1v1h-1zM22 11h1v1h-1zM23 11h1v1h-1zM24 11h1v1h-1zM4 12h1v1h-1zM5 12h1v1h-1zM6 12h1v1h-1zM7 12h1v1h-1zM8 12h1v1h-1zM10 12h1v1h-1zM11 12h1v1h-1zM12 12h1v1h-1zM13 12h1v1h-1zM14 12h1v1h-1zM16 12h1v1h-1zM17 12h1v1h-1zM19 12h1v1h-1zM20 12h1v1h-1zM21 12h1v1h-1zM23 12h1v1h-1zM25 12h1v1h-1zM27 12h1v1h-1zM29 12h1v1h-1zM31 12h1v1h-1zM6 13h1v1h-1zM7 13h1v1h-1zM8 13h1v1h-1zM9 13h1v1h-1zM11 13h1v1h-1zM13 13h1v1h-1zM17 13h1v1h-1zM21 13h1v1h-1zM22 13h1v1h-1zM23 13h1v1h-1zM25 13h1v1h-1zM26 13h1v1h-1zM27 13h1v1h-1zM28 13h1v1h-1zM32 13h1v1h-1zM4 14h1v1h-1zM5 14h1v1h-1zM10 14h1v1h-1zM11 14h1v1h-1zM12 14h1v1h-1zM13 14h1v1h-1zM15 14h1v1h-1zM16 14h1v1h-1zM17 14h1v1h-1zM18 14h1v1h-1zM19 14h1v1h-1zM22 14h1v1h-1zM25 14h1v1h-1zM27 14h1v1h-1zM28 14h1v1h-1zM8 15h1v1h-1zM11 15h1v1h-1zM12 15h1v1h-1zM13 15h1v1h-1zM14 15h1v1h-1zM15 15h1v1h-1zM19 15h1v1h-1zM22 15h1v1h-1zM24 15h1v1h-1zM26 15h1v1h-1zM28 15h1v1h-1zM29 15h1v1h-1zM31 15h1v1h-1zM5 16h1v1h-1zM6 16h1v1h-1zM7 16h1v1h-1zM8 16h1v1h-1zM10 16h1v1h-1zM12 16h1v1h-1zM13 16h1v1h-1zM15 16h1v1h-1zM17 16h1v1h-1zM18 16h1v1h-1zM19 16h1v1h-1zM20 16h1v1h-1zM21 16h1v1h-1zM24 16h1v1h-1zM29 16h1v1h-1zM30 16h1v1h-1zM4 17h1v1h-1zM9 17h1v1h-1zM12 17h1v1h-1zM14 17h1v1h-1zM16 17h1v1h-1zM17 17h1v1h-1zM23 17h1v1h-1zM24 17h1v1h-1zM25 17h1v1h-1zM26 17h1v1h-1zM27 17h1v1h-1zM28 17h1v1h-1zM32 17h1v1h-1zM5 18h1v1h-1zM8 18h1v1h-1zM9 18h1v1h-1zM10 18h1v1h-1zM14 18h1v1h-1zM19 18h1v1h-1zM20 18h1v1h-1zM25 18h1v1h-1zM26 18h1v1h-1zM28 18h1v1h-1zM29 18h1v1h-1zM30 18h1v1h-1zM5 19h1v1h-1zM7 19h1v1h-1zM8 19h1v1h-1zM9 19h1v1h-1zM12 19h1v1h-1zM13 19h1v1h-1zM16 19h1v1h-1zM19 19h1v1h-1zM20 19h1v1h-1zM24 19h1v1h-1zM25 19h1v1h-1zM27 19h1v1h-1zM31 19h1v1h-1zM5 20h1v1h-1zM7 20h1v1h-1zM10 20h1v1h-1zM11 20h1v1h-1zM12 20h1v1h-1zM13 20h1v1h-1zM16 20h1v1h-1zM17 20h1v1h-1zM18 20h1v1h-1zM21 20h1v1h-1zM24 20h1v1h-1zM29 20h1v1h-1zM30 20h1v1h-1zM4 21h1v1h-1zM5 21h1v1h-1zM7 21h1v1h-1zM12 21h1v1h-1zM13 21h1v1h-1zM18 21h1v1h-1zM22 21h1v1h-1zM23 21h1v1h-1zM24 21h1v1h-1zM25 21h1v1h-1zM26 21h1v1h-1zM27 21h1v1h-1zM28 21h1v1h-1zM30 21h1v1h-1zM32 21h1v1h-1zM4 22h1v1h-1zM6 22h1v1h-1zM8 22h1v1h-1zM9 22h1v1h-1zM10 22h1v1h-1zM15 22h1v1h-1zM16 22h1v1h-1zM18 22h1v1h-1zM19 22h1v1h-1zM20 22h1v1h-1zM21 22h1v1h-1zM22 22h1v1h-1zM25 22h1v1h-1zM27 22h1v1h-1zM30 22h1v1h-1zM4 23h1v1h-1zM8 23h1v1h-1zM9 23h1v1h-1zM11 23h1v1h-1zM14 23h1v1h-1zM15 23h1v1h-1zM19 23h1v1h-1zM22 23h1v1h-1zM24 23h1v1h-1zM27 23h1v1h-1zM31 23h1v1h-1zM4 24h1v1h-1zM6 24h1v1h-1zM7 24h1v1h-1zM9 24h1v1h-1zM10 24h1v1h-1zM12 24h1v1h-1zM13 24h1v1h-1zM15 24h1v1h-1zM17 24h1v1h-1zM18 24h1v1h-1zM19 24h1v1h-1zM21 24h1v1h-1zM22 24h1v1h-1zM24 24h1v1h-1zM25 24h1v1h-1zM26 24h1v1h-1zM27 24h1v1h-1zM28 24h1v1h-1zM30 24h1v1h-1zM31 24h1v1h-1zM32 24h1v1h-1zM12 25h1v1h-1zM13 25h1v1h-1zM14 25h1v1h-1zM16 25h1v1h-1zM17 25h1v1h-1zM20 25h1v1h-1zM21 25h1v1h-1zM22 25h1v1h-1zM23 25h1v1h-1zM24 25h1v1h-1zM28 25h1v1h-1zM29 25h1v1h-1zM30 25h1v1h-1zM31 25h1v1h-1zM32 25h1v1h-1zM4 26h1v1h-1zM5 26h1v1h-1zM6 26h1v1h-1zM7 26h1v1h-1zM8 26h1v1h-1zM9 26h1v1h-1zM10 26h1v1h-1zM12 26h1v1h-1zM13 26h1v1h-1zM18 26h1v1h-1zM19 26h1v1h-1zM20 26h1v1h-1zM21 26h1v1h-1zM23 26h1v1h-1zM24 26h1v1h-1zM26 26h1v1h-1zM28 26h1v1h-1zM29 26h1v1h-1zM30 26h1v1h-1zM4 27h1v1h-1zM10 27h1v1h-1zM14 27h1v1h-1zM16 27h1v1h-1zM18 27h1v1h-1zM20 27h1v1h-1zM22 27h1v1h-1zM23 27h1v1h-1zM24 27h1v1h-1zM28 27h1v1h-1zM32 27h1v1h-1zM4 28h1v1h-1zM6 28h1v1h-1zM7 28h1v1h-1zM8 28h1v1h-1zM10 28h1v1h-1zM12 28h1v1h-1zM16 28h1v1h-1zM17 28h1v1h-1zM18 28h1v1h-1zM21 28h1v1h-1zM24 28h1v1h-1zM25 28h1v1h-1zM26 28h1v1h-1zM27 28h1v1h-1zM28 28h1v1h-1zM30 28h1v1h-1zM31 28h1v1h-1zM32 28h1v1h-1zM4 29h1v1h-1zM6 29h1v1h-1zM7 29h1v1h-1zM8 29h1v1h-1zM10 29h1v1h-1zM12 29h1v1h-1zM14 29h1v1h-1zM17 29h1v1h-1zM21 29h1v1h-1zM22 29h1v1h-1zM23 29h1v1h-1zM29 29h1v1h-1zM30 29h1v1h-1zM31 29h1v1h-1zM32 29h1v1h-1zM4 30h1v1h-1zM6 30h1v1h-1zM7 30h1v1h-1zM8 30h1v1h-1zM10 30h1v1h-1zM12 30h1v1h-1zM15 30h1v1h-1zM16 30h1v1h-1zM18 30h1v1h-1zM19 30h1v1h-1zM20 30h1v1h-1zM22 30h1v1h-1zM23 30h1v1h-1zM25 30h1v1h-1zM26 30h1v1h-1zM27 30h1v1h-1zM28 30h1v1h-1zM29 30h1v1h-1zM30 30h1v1h-1zM31 30h1v1h-1zM4 31h1v1h-1zM10 31h1v1h-1zM12 31h1v1h-1zM13 31h1v1h-1zM14 31h1v1h-1zM15 31h1v1h-1zM20 31h1v1h-1zM24 31h1v1h-1zM25 31h1v1h-1zM26 31h1v1h-1zM27 31h1v1h-1zM29 31h1v1h-1zM31 31h1v1h-1zM4 32h1v1h-1zM5 32h1v1h-1zM6 32h1v1h-1zM7 32h1v1h-1zM8 32h1v1h-1zM9 32h1v1h-1zM10 32h1v1h-1zM12 32h1v1h-1zM13 32h1v1h-1zM14 32h1v1h-1zM15 32h1v1h-1zM16 32h1v1h-1zM21 32h1v1h-1zM23 32h1v1h-1zM25 32h1v1h-1zM30 32h1v1h-1z" fill="#141a34"/></svg>
+    <p class="chart" id="scanlab">${esc(C.scan.hint)}</p>
+    <p class="said" id="scannote">${esc(C.scan.note)}</p>
   </div>
 </section>
 
@@ -1235,6 +1360,286 @@ gsap.to('#sig', { clipPath: 'inset(0 0% 0 0)', duration: 1.9, ease: 'power2.inOu
     tl.to(tom, { opacity: 0, duration: 0.35 }, '>-0.3');
   }
   ScrollTrigger.create({ trigger: '#notewrap', start: 'top 58%', once: true, onEnter: tomatoRun });
+}
+
+/* ---------------- 54 flower varieties, built from real petal geometry ---------------- */
+const rnd = (a, b) => a + Math.random() * (b - a);
+const pick = a => a[(Math.random() * a.length) | 0];
+
+/* a petal pointing up from the centre, in a 100x100 box */
+function petalPath(shape, L, W) {
+  const w = W, l = L;
+  switch (shape) {
+    case 'round':  return `M0 0 C ${w} ${-l*0.30} ${w} ${-l*0.78} 0 ${-l} C ${-w} ${-l*0.78} ${-w} ${-l*0.30} 0 0 Z`;
+    case 'point':  return `M0 0 C ${w*0.95} ${-l*0.34} ${w*0.5} ${-l*0.82} 0 ${-l} C ${-w*0.5} ${-l*0.82} ${-w*0.95} ${-l*0.34} 0 0 Z`;
+    case 'strap':  return `M0 0 C ${w} ${-l*0.2} ${w*0.85} ${-l*0.86} 0 ${-l} C ${-w*0.85} ${-l*0.86} ${-w} ${-l*0.2} 0 0 Z`;
+    case 'spoon':  return `M0 0 C ${w*0.45} ${-l*0.3} ${w} ${-l*0.62} ${w*0.5} ${-l*0.93} C ${w*0.2} ${-l*1.04} ${-w*0.2} ${-l*1.04} ${-w*0.5} ${-l*0.93} C ${-w} ${-l*0.62} ${-w*0.45} ${-l*0.3} 0 0 Z`;
+    case 'notch':  return `M0 0 C ${w} ${-l*0.4} ${w*0.8} ${-l*0.95} ${w*0.3} ${-l*0.9} L 0 ${-l*0.74} L ${-w*0.3} ${-l*0.9} C ${-w*0.8} ${-l*0.95} ${-w} ${-l*0.4} 0 0 Z`;
+    case 'ruffle': return `M0 0 C ${w} ${-l*0.28} ${w*0.6} ${-l*0.6} ${w*0.78} ${-l*0.8} C ${w*0.5} ${-l*0.78} ${w*0.32} ${-l*1.0} 0 ${-l*0.92} C ${-w*0.32} ${-l*1.0} ${-w*0.5} ${-l*0.78} ${-w*0.78} ${-l*0.8} C ${-w*0.6} ${-l*0.6} ${-w} ${-l*0.28} 0 0 Z`;
+    case 'cup':    return `M0 0 C ${w*1.1} ${-l*0.2} ${w*0.9} ${-l*0.9} 0 ${-l} C ${-w*0.9} ${-l*0.9} ${-w*1.1} ${-l*0.2} 0 0 Z`;
+    case 'bell':   return `M0 0 C ${w*0.9} ${-l*0.1} ${w} ${-l*0.7} ${w*0.45} ${-l} L ${-w*0.45} ${-l} C ${-w} ${-l*0.7} ${-w*0.9} ${-l*0.1} 0 0 Z`;
+    default:       return `M0 0 C ${w} ${-l*0.3} ${w} ${-l*0.8} 0 ${-l} C ${-w} ${-l*0.8} ${-w} ${-l*0.3} 0 0 Z`;
+  }
+}
+function ringOf(shape, n, L, W, fill, spin, cy) {
+  let o = '';
+  const d = petalPath(shape, L, W);
+  for (let k = 0; k < n; k++)
+    o += `<path d="${d}" fill="${fill}" transform="translate(50 ${cy}) rotate(${(k * 360 / n + spin).toFixed(1)})"/>`;
+  return o;
+}
+function centre(type, c1, c2) {
+  switch (type) {
+    case 'disc': {
+      let o = `<circle cx="50" cy="50" r="15" fill="${c1}"/>`;
+      for (let i = 0; i < 34; i++) {
+        const r = 13 * Math.sqrt(i / 34), a = i * 2.399;
+        o += `<circle cx="${(50 + r * Math.cos(a)).toFixed(1)}" cy="${(50 + r * Math.sin(a)).toFixed(1)}" r="1.5" fill="${c2}"/>`;
+      }
+      return o;
+    }
+    case 'boss':    return `<circle cx="50" cy="50" r="9" fill="${c1}"/><circle cx="50" cy="50" r="5" fill="${c2}"/>`;
+    case 'stamens': {
+      let o = '';
+      for (let k = 0; k < 11; k++) {
+        const a = (k * 360 / 11) * Math.PI / 180;
+        o += `<line x1="50" y1="50" x2="${(50 + Math.cos(a) * 13).toFixed(1)}" y2="${(50 + Math.sin(a) * 13).toFixed(1)}" stroke="${c1}" stroke-width="1.6"/>`
+           + `<circle cx="${(50 + Math.cos(a) * 14).toFixed(1)}" cy="${(50 + Math.sin(a) * 14).toFixed(1)}" r="2.3" fill="${c2}"/>`;
+      }
+      return o + `<circle cx="50" cy="50" r="5" fill="${c2}"/>`;
+    }
+    case 'throat':  return `<circle cx="50" cy="50" r="13" fill="${c1}"/><circle cx="50" cy="50" r="7" fill="${c2}"/>`;
+    case 'eye':     return `<circle cx="50" cy="50" r="7" fill="${c1}"/>`;
+    default:        return '';
+  }
+}
+/* real colours, roughly: [outer, mid, inner, centre1, centre2] */
+const HUE = {
+  crimson:['#c8384a','#b02c3c','#e0697a','#7d2028','#f2c04a'], scarlet:['#e04a34','#c93a26','#f0765e','#8a3218','#f7d27a'],
+  blush:  ['#f3aec0','#e2879f','#f9d2dc','#c9788c','#fbe7c9'], rosepk: ['#ea87a4','#d66a8a','#f6bdcd','#b0506c','#f3d79a'],
+  cream:  ['#f7ecd2','#e9d9ae','#fdf6e6','#d3ab63','#8a6a2a'], white:  ['#f6f2e8','#e2dccb','#ffffff','#c9bda3','#e8b64a'],
+  butter: ['#f5c65a','#e0a933','#fbe6ac','#8a5f22','#5d3f14'], amber:  ['#efa63c','#d88c22','#f8d18d','#7a4d12','#4d3009'],
+  lilac:  ['#c3aee0','#a88ecd','#e2d5f2','#7d63a8','#f0e2a8'], violet: ['#8e6fc0','#7757a8','#b79ddb','#553880','#efd98a'],
+  indigo: ['#6b74c4','#5560ab','#9aa2dd','#3c4482','#f2e0a0'], sky:    ['#8fb6e0','#7099c9','#bcd6ef','#4d739c','#f4e3ab'],
+  coral:  ['#f09a7e','#dc7c5e','#f8c6b2','#b8563a','#f6dfa6'], peach:  ['#f4b98f','#e39c6c','#fad9c0','#bb7040','#f7e3ae'],
+  magenta:['#c95a9c','#ad4483','#e08cbd','#7d2c5c','#f3d68e'], sage:   ['#a9c69e','#8aab7e','#cddfc4','#6a8a5f','#efe0a6'],
+  wine:   ['#9c3a5e','#83294a','#c06a87','#5f1a33','#e8c07a'], tangerine:['#f0873a','#d76f22','#f8b87c','#8f4a10','#4f2a06']
+};
+/* name, petal shape, petals per ring, rings, petal length, petal width, centre, colour */
+const FLORA = [
+  ['rose','round',7,3,26,13,'none','crimson'],        ['garden rose','round',8,4,24,12,'none','blush'],
+  ['tea rose','round',7,3,25,12,'none','cream'],      ['peony','ruffle',9,3,27,14,'none','rosepk'],
+  ['ranunculus','round',10,4,22,10,'none','white'],   ['camellia','round',6,3,26,15,'boss','crimson'],
+  ['dahlia','point',12,3,28,8,'boss','magenta'],      ['zinnia','spoon',11,2,27,9,'boss','scarlet'],
+  ['chrysanthemum','strap',18,3,29,5,'boss','amber'], ['aster','strap',20,2,28,4,'boss','violet'],
+  ['daisy','strap',14,1,27,5,'boss','white'],         ['gerbera','strap',22,2,30,5,'disc','coral'],
+  ['sunflower','point',18,2,31,9,'disc','butter'],    ['echinacea','strap',14,1,29,6,'disc','blush'],
+  ['black-eyed susan','strap',13,1,28,6,'disc','butter'], ['coreopsis','notch',8,1,27,10,'boss','amber'],
+  ['gaillardia','notch',13,1,28,7,'disc','tangerine'],['marigold','ruffle',14,3,24,8,'none','amber'],
+  ['calendula','strap',16,2,27,5,'boss','tangerine'], ['cosmos','notch',8,1,28,12,'boss','rosepk'],
+  ['anemone','round',7,1,27,13,'stamens','white'],    ['poppy','round',5,1,29,18,'stamens','scarlet'],
+  ['icelandic poppy','cup',5,1,28,17,'stamens','peach'], ['hibiscus','round',5,1,31,17,'stamens','crimson'],
+  ['lily','point',6,1,32,10,'stamens','white'],       ['tiger lily','point',6,1,31,10,'stamens','tangerine'],
+  ['magnolia','cup',8,2,30,12,'boss','cream'],        ['lotus','point',12,3,30,9,'boss','blush'],
+  ['water lily','point',14,3,29,7,'boss','white'],    ['camomile','strap',15,1,25,4,'disc','white'],
+  ['tulip','cup',6,2,30,14,'none','crimson'],         ['parrot tulip','ruffle',6,2,29,15,'none','wine'],
+  ['crocus','cup',6,1,28,11,'boss','violet'],         ['buttercup','round',5,1,22,13,'boss','butter'],
+  ['primrose','notch',5,1,24,14,'eye','butter'],      ['pansy','notch',5,1,26,16,'eye','violet'],
+  ['violet','notch',5,1,20,12,'eye','indigo'],        ['petunia','round',5,1,27,17,'throat','magenta'],
+  ['phlox','notch',5,1,22,12,'eye','blush'],          ['periwinkle','notch',5,1,23,13,'eye','sky'],
+  ['forget-me-not','round',5,1,15,9,'eye','sky'],     ['geranium','round',5,1,22,12,'eye','scarlet'],
+  ['begonia','round',6,2,24,13,'boss','coral'],       ['azalea','point',5,1,28,14,'stamens','rosepk'],
+  ['oleander','point',5,1,26,12,'boss','blush'],      ['plumeria','spoon',5,1,29,14,'none','cream'],
+  ['frangipani','spoon',5,1,28,14,'none','peach'],    ['orchid','notch',5,1,27,13,'throat','lilac'],
+  ['iris','point',6,2,31,11,'none','violet'],         ['freesia','point',6,1,25,10,'boss','cream'],
+  ['daffodil','point',6,1,27,11,'throat','butter'],   ['narcissus','round',6,1,25,12,'throat','white'],
+  ['bluebell','bell',5,1,24,11,'none','indigo'],      ['snowdrop','bell',3,1,25,13,'none','white'],
+  ['hellebore','round',5,1,26,15,'stamens','sage'],   ['scabiosa','notch',12,2,26,7,'boss','lilac'],
+  ['cornflower','strap',14,2,26,5,'boss','indigo'],   ['clematis','point',6,1,30,12,'stamens','lilac']
+];
+function flower(v) {
+  const [, shape, n, rings, L, W, ctr, col] = v;
+  const c = HUE[col];
+  let o = '';
+  /* biggest petals at the back, smallest and lightest on top: that is what
+     makes a rose read as layered instead of as one solid disc */
+  for (let r = 0; r < rings; r++) {
+    const f = r === 0 ? c[1] : (r === rings - 1 ? c[2] : c[0]);
+    o += ringOf(shape, n, L * (1 - r * 0.26), W * (1 - r * 0.22), f, r * (180 / n) + r * 9, 50);
+  }
+  return o + centre(ctr, c[3], c[4]);
+}
+
+const LEAFY = ['#5d8a52','#4d7745','#6f9b63','#436a3d','#7ba36d'];
+function leafSvg() {
+  const g = pick(LEAFY);
+  return `<path d="M50 8 C 76 26 78 58 50 90 C 22 58 24 26 50 8 Z" fill="${g}"/>`
+       + `<path d="M50 14 L50 84" stroke="rgba(255,255,255,.13)" stroke-width="2.6"/>`;
+}
+const oneBloom = () => (Math.random() < 0.17 ? leafSvg() : flower(pick(FLORA)));
+
+function makeBurst(host, px, py, n) {
+  const made = [];
+  for (let i = 0; i < n; i++) {
+    const el = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    el.setAttribute('class', 'bloom');
+    el.setAttribute('viewBox', '0 0 100 100');
+    el.style.left = (px + rnd(-9, 9)).toFixed(1) + '%';
+    el.style.top = (py + rnd(-9, 9)).toFixed(1) + '%';
+    el.style.width = rnd(11, 23).toFixed(1) + 'vmin';
+    el.innerHTML = `<g transform="rotate(${rnd(-45, 45).toFixed(1)} 50 50)">${oneBloom()}</g>`;
+    host.appendChild(el);
+    made.push(el);
+  }
+  return made;
+}
+function makeGarden(host, cols, rows) {
+  /* a jittered grid so the whole screen is covered, with a different set of
+     varieties, colours, sizes and angles on every single visit */
+  const out = [];
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      const body = oneBloom();
+      const roll = Math.random();
+      const size = roll > 0.80 ? rnd(30, 42) : roll > 0.40 ? rnd(20, 30) : rnd(13, 20);
+      out.push({
+        body, size,
+        x: ((c + 0.5 + rnd(-0.46, 0.46)) / cols) * 112 - 6,
+        y: ((r + 0.5 + rnd(-0.46, 0.46)) / rows) * 112 - 6,
+        rot: rnd(-45, 45)
+      });
+    }
+  }
+  out.sort((a, b) => a.size - b.size);
+  host.innerHTML = out.map(f =>
+    `<svg class="bloom" viewBox="0 0 100 100" style="left:${f.x.toFixed(1)}%;top:${f.y.toFixed(1)}%;width:${f.size.toFixed(1)}vmin">`
+    + `<g transform="rotate(${f.rot.toFixed(1)} 50 50)">${f.body}</g></svg>`).join('');
+  return [...host.children];
+}
+{
+  const host = document.getElementById('beds');
+  const hint = document.getElementById('gdhint');
+  const more = document.getElementById('gdmore');
+  const sec = document.getElementById('garden');
+  let blooms = [], taps = 0, built = false;
+
+  ScrollTrigger.create({ trigger: '#garden', start: 'top 92%', once: true, onEnter: () => {
+    /* built here, not at page load: nothing exists until she reaches it */
+    blooms = makeGarden(host, small ? 5 : 7, small ? 7 : 8);
+    built = true;
+    blooms.forEach(b => gsap.set(b, { xPercent: -50, yPercent: -50, scale: 0, opacity: 0 }));
+    gsap.to('#garden .k', { opacity: 1, duration: 0.9 });
+    const order = blooms.slice().sort((a, b) => parseFloat(b.style.top) - parseFloat(a.style.top));
+    gsap.to(order, { scale: 1, opacity: 1, duration: 0.85, ease: 'back.out(1.5)', stagger: { each: 0.026 } });
+    gsap.to(hint, { opacity: 1, duration: 0.9, delay: 1.5 });
+  } });
+
+  sec.addEventListener('pointerdown', e => {
+    if (calm || !built || host.children.length > 150) return;
+    taps++;
+    const r = sec.getBoundingClientRect();
+    const px = ((e.clientX - r.left) / r.width) * 100;
+    const py = ((e.clientY - r.top) / r.height) * 100;
+    makeBurst(host, px, py, 5).forEach((b, i2) => {
+      gsap.set(b, { xPercent: -50, yPercent: -50, scale: 0, opacity: 0 });
+      gsap.to(b, { scale: 1, opacity: 1, duration: 0.7, delay: i2 * 0.05, ease: 'back.out(2)' });
+    });
+    if (taps === 3) {
+      gsap.to(hint, { opacity: 0, duration: 0.4 });
+      gsap.fromTo(more, { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 1, delay: 0.3, ease: 'power2.out' });
+    }
+  }, { passive: true });
+}
+
+/* the code fades up once she is past the letter */
+if (!touch) {
+  gsap.timeline({ scrollTrigger: { trigger: '#scan', start: 'top 86%' } })
+    .to('#scanhint', { opacity: 1, duration: 0.8 })
+    .fromTo('#scan svg', { opacity: 0, y: 16, scale: 0.94 },
+      { opacity: 1, y: 0, scale: 1, duration: 0.9, ease: 'back.out(1.4)' }, 0.25)
+    .to('#scanlab', { opacity: 1, duration: 0.8 }, 0.8)
+    .fromTo('#scannote', { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.9 }, 1.1);
+}
+
+/* ---------------- the sealed letter ---------------- */
+{
+  const env = document.getElementById('envsvg');
+  const hint = document.getElementById('lthint');
+  const flap = env.querySelector('.flap');
+  const paper = env.querySelector('.paper');
+  const sheet = env.querySelector('.sheet');
+  const pressed = env.querySelector('.pressed');
+  const rules = env.querySelectorAll('.rule');
+  const ink = [...env.querySelectorAll('.ink')];
+  const doodle = env.querySelector('.doodle');
+  const flits = [...env.querySelectorAll('.flit')];
+  const chips = [...env.querySelectorAll('.chip')];
+  let opened = false;
+  gsap.set(sheet, { scaleY: 0.58, svgOrigin: '170 318' });
+
+  ScrollTrigger.create({ trigger: '#letter', start: 'top 85%', once: true, onEnter: () => {
+    gsap.to(hint, { opacity: 1, duration: 0.9 });
+    gsap.fromTo(env, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 1.1, ease: 'power2.out' });
+  } });
+
+  const openIt = () => {
+    if (opened) return;
+    opened = true;
+    gsap.timeline()
+      /* the wax breaks in two and falls */
+      .to(env.querySelector('.sl'), { rotate: -46, x: -28, y: 34, opacity: 0, duration: 0.7, ease: 'power2.in', svgOrigin: '170 242' }, 0)
+      .to(env.querySelector('.sr'), { rotate: 52, x: 30, y: 38, opacity: 0, duration: 0.7, ease: 'power2.in', svgOrigin: '170 242' }, 0.05)
+      .to(env.querySelectorAll('.seal circle, .seal path:not(.sl):not(.sr)'), { opacity: 0, duration: 0.3 }, 0)
+      /* the flap lifts, and the letter is brought in front of it */
+      .to(flap, { scaleY: -1, duration: 0.7, ease: 'power2.inOut', svgOrigin: '170 154' }, 0.4)
+      .add(() => env.appendChild(paper), 0.85)
+      /* it comes out, then unfolds */
+      .to(paper, { y: -146, duration: 1.0, ease: 'power3.out' }, 0.9)
+      .to(sheet, { scaleY: 1, duration: 0.85, ease: 'power2.out' }, 1.45)
+      .to(hint, { opacity: 0, duration: 0.4 }, 0.9)
+      /* a pressed flower slips out of the envelope */
+      .set(pressed, { opacity: 1 }, 1.1)
+      .fromTo(pressed, { y: 0, rotate: 0 }, { y: 160, rotate: 200, duration: 2.3, ease: 'power1.in' }, 1.1)
+      .to(pressed, { opacity: 0, duration: 0.6 }, 2.7)
+      /* the ruling fades and the handwriting arrives, a line at a time */
+      .to(rules, { opacity: 0, duration: 0.8, stagger: 0.12 }, 2.1)
+      .to(ink, { opacity: 1, duration: 0.65, stagger: 0.42, ease: 'power2.out' }, 2.2)
+      .to(doodle, { opacity: 1, duration: 0.7, ease: 'back.out(2)', startAt: { scale: 0.4, svgOrigin: '258 292' } }, 4.4);
+
+    /* a puff of paper bursts out the moment the wax gives */
+    chips.forEach((c, i) => {
+      const a = (i / chips.length) * Math.PI * 2 + Math.random();
+      const d = 40 + Math.random() * 46;
+      gsap.set(c, { opacity: 0 });
+      gsap.timeline({ delay: 0.5 })
+        .to(c, { opacity: 1, duration: 0.12 }, 0)
+        .to(c, { x: Math.cos(a) * d, duration: 1.5, ease: 'power2.out' }, 0)
+        .to(c, { y: Math.sin(a) * d * 0.5 - 34, duration: 0.55, ease: 'power2.out' }, 0)
+        .to(c, { y: '+=120', duration: 1.6, ease: 'power1.in' }, 0.55)
+        .to(c, { rotate: (Math.random() * 720 - 360), duration: 2.1, ease: 'none' }, 0)
+        .to(c, { opacity: 0, duration: 0.6 }, 1.5);
+    });
+
+    /* and four butterflies let themselves out */
+    flits.forEach((f, i) => {
+      const dir = i < 2 ? -1 : 1;
+      const dx = dir * (80 + Math.random() * 120);
+      const dy = -(190 + Math.random() * 130);
+      gsap.set(f, { opacity: 0, scale: 0.5, transformOrigin: '50% 50%' });
+      gsap.timeline({ delay: 0.95 + i * 0.22 })
+        .to(f, { opacity: 1, scale: 1, duration: 0.4, ease: 'back.out(2)' }, 0)
+        .to(f, { y: dy, duration: 3.4, ease: 'power1.out' }, 0)
+        .to(f, { x: dx, duration: 3.4, ease: 'sine.inOut' }, 0)
+        .to(f, { rotate: dir * 22, duration: 3.4, ease: 'sine.inOut' }, 0)
+        .to(f, { opacity: 0, duration: 1.0 }, 2.4);
+      /* wings */
+      gsap.to(f.querySelector('.wg'), { scaleX: 0.22, duration: 0.14, repeat: 26, yoyo: true,
+        ease: 'sine.inOut', transformOrigin: '50% 50%', delay: 0.95 + i * 0.22 });
+    });
+  };
+  env.addEventListener('pointerdown', e => { e.preventDefault(); openIt(); });
+  env.setAttribute('tabindex', '0');
+  env.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openIt(); } });
 }
 
 /* star counter follows the flight */
