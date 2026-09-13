@@ -109,15 +109,15 @@ body.held{overflow:hidden;height:100svh}
 
 /* the code: pointless on the device you would scan it with, so touch never sees it */
 #scan{max-width:31rem;width:100%;margin:3.2rem 0 0;display:flex;flex-direction:column;align-items:flex-start}
-html.touch #scan svg,html.touch #scanlab{display:none}   /* you cannot scan a code with the phone showing it */
-#scanlink{display:none;margin:1rem 0 0;font-family:var(--sans);font-size:.62rem;letter-spacing:.24em;
+/* the code shows everywhere. on a phone she also gets a button, since a phone cannot scan its own screen. */
+#scanlink{display:none;margin:1.1rem 0 0;font-family:var(--sans);font-size:.62rem;letter-spacing:.24em;
   text-transform:uppercase;color:var(--cream);text-decoration:none;padding:.85rem 1.4rem;
   border:1px solid rgba(244,239,228,.3);border-radius:100px;background:rgba(244,239,228,.06);
   -webkit-tap-highlight-color:transparent}
 html.touch #scanlink{display:inline-block}
 #scan svg{width:132px;height:132px;display:block;margin:.9rem 0 0;border-radius:6px;opacity:0}
 #scanhint,#scanlab{opacity:0;color:rgba(244,239,228,.45)}
-#scanlab{margin:.8rem 0 0;letter-spacing:.24em}
+#scanlab{margin:.85rem 0 0;letter-spacing:.2em;line-height:1.6}
 #scannote{font-family:var(--hand);font-size:clamp(1.15rem,4.6vw,1.4rem);color:var(--butter);
   margin:.7rem 0 0;opacity:0}
 
@@ -458,7 +458,7 @@ window.CONTENT = {
 
   later: "It has been {n} since I built this page. It still opens. It is going to keep opening.",
 
-  scan: { k: "one last thing", hint: "point your phone at this", tap: "open the prescription",
+  scan: { k: "one last thing", hint: "point your phone at this", tap: "open the prescription", tapHint: "scan it from another device, or just tap",
           note: "A prescription. It is different every time, and none of it is valid." },
   garden: { k: "for you", hint: "tap anywhere", more: "It keeps growing. So do you." },
   ps: { hint: "one more thing", lines: [
@@ -1562,14 +1562,12 @@ function makeGarden(host, cols, rows) {
 {
   const tl = gsap.timeline({ scrollTrigger: { trigger: '#scan', start: 'top 86%' } });
   tl.to('#scanhint', { opacity: 1, duration: 0.8 });
-  if (touch) {
-    /* a phone cannot scan its own screen, so it gets the link instead */
-    tl.fromTo('#scanlink', { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power2.out' }, 0.3);
-  } else {
-    tl.fromTo('#scan svg', { opacity: 0, y: 16, scale: 0.94 },
-        { opacity: 1, y: 0, scale: 1, duration: 0.9, ease: 'back.out(1.4)' }, 0.25)
-      .to('#scanlab', { opacity: 1, duration: 0.8 }, 0.8);
-  }
+  document.getElementById('scanlab').textContent = touch ? C.scan.tapHint : C.scan.hint;
+  tl.fromTo('#scan svg', { opacity: 0, y: 16, scale: 0.94 },
+      { opacity: 1, y: 0, scale: 1, duration: 0.9, ease: 'back.out(1.4)' }, 0.25)
+    .to('#scanlab', { opacity: 1, duration: 0.8 }, 0.8);
+  if (touch) tl.fromTo('#scanlink', { opacity: 0, y: 14 },
+    { opacity: 1, y: 0, duration: 0.9, ease: 'power2.out' }, 1.0);
   tl.fromTo('#scannote', { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.9 }, 1.1);
 }
 
